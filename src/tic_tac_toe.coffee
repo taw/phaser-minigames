@@ -19,7 +19,7 @@ class GameState
         @content_cells[y][x].text = @content[y][x]
 
   create: ->
-    @active = true
+    @winner = null
     @content = (("?" for x in [0..2]) for y in [0..2])
     @content_cells = ((@new_cell(x, y) for x in [0..2]) for y in [0..2])
     @game.stage.backgroundColor = "F88"
@@ -44,18 +44,30 @@ class GameState
       @click_cell(x,y)
 
   check_who_won: ->
-    # TODO
-    null
+    lines = [
+      [[0,0], [1,0], [2,0]],
+      [[0,1], [1,1], [2,1]],
+      [[0,2], [1,2], [2,2]],
+      [[0,0], [0,1], [0,2]],
+      [[1,0], [1,1], [1,2]],
+      [[2,0], [2,1], [2,2]],
+      [[0,0], [1,1], [2,2]],
+      [[2,0], [1,1], [0,2]],
+    ]
+    for line in lines
+      values = (@content[y][x] for [x,y] in line)
+      if JSON.stringify(values) == JSON.stringify(["X", "X", "X"])
+        @winner = "X"
+      if JSON.stringify(values) == JSON.stringify(["O", "O", "O"])
+        @winner = "O"
 
   ai_movement: ->
-    if @active == false
-      return
+    return if @winner != null
     # TODO
     null
 
   click_cell: (x,y) ->
-    if @active == false
-      return
+    return if @winner != null
     if @content[y][x] == "?"
       @content[y][x] = "X"
       @check_who_won()

@@ -43,7 +43,7 @@
 
     GameState.prototype.create = function() {
       var x, y;
-      this.active = true;
+      this.winner = null;
       this.content = (function() {
         var i, results;
         results = [];
@@ -102,18 +102,41 @@
     };
 
     GameState.prototype.check_who_won = function() {
-      return null;
+      var i, len, line, lines, results, values, x, y;
+      lines = [[[0, 0], [1, 0], [2, 0]], [[0, 1], [1, 1], [2, 1]], [[0, 2], [1, 2], [2, 2]], [[0, 0], [0, 1], [0, 2]], [[1, 0], [1, 1], [1, 2]], [[2, 0], [2, 1], [2, 2]], [[0, 0], [1, 1], [2, 2]], [[2, 0], [1, 1], [0, 2]]];
+      results = [];
+      for (i = 0, len = lines.length; i < len; i++) {
+        line = lines[i];
+        values = (function() {
+          var j, len1, ref, results1;
+          results1 = [];
+          for (j = 0, len1 = line.length; j < len1; j++) {
+            ref = line[j], x = ref[0], y = ref[1];
+            results1.push(this.content[y][x]);
+          }
+          return results1;
+        }).call(this);
+        if (JSON.stringify(values) === JSON.stringify(["X", "X", "X"])) {
+          this.winner = "X";
+        }
+        if (JSON.stringify(values) === JSON.stringify(["O", "O", "O"])) {
+          results.push(this.winner = "O");
+        } else {
+          results.push(void 0);
+        }
+      }
+      return results;
     };
 
     GameState.prototype.ai_movement = function() {
-      if (this.active === false) {
+      if (this.winner !== null) {
         return;
       }
       return null;
     };
 
     GameState.prototype.click_cell = function(x, y) {
-      if (this.active === false) {
+      if (this.winner !== null) {
         return;
       }
       if (this.content[y][x] === "?") {
