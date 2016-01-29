@@ -1,5 +1,4 @@
 Phaser = window.Phaser
-game_state = null
 size_x = window.innerWidth
 size_y = window.innerHeight
 
@@ -10,10 +9,16 @@ class GameState
   new_ball: (x,y) ->
     @balls.push new Ball(x, y)
 
-  update: (dt) ->
+  update: ->
+    dt = @game.time.elapsed/1000.0
     # Elapsed time only counts when game was actually running (so not in background)
     for ball in @balls
       ball.update(dt)
+
+  create: ->
+    @game.stage.backgroundColor = "88F"
+    @game.input.onTap.add =>
+      @new_ball @game.input.activePointer.worldX, @game.input.activePointer.worldY
 
 class Ball
   constructor: (@x, @y) ->
@@ -71,13 +76,5 @@ class Ball
     @graphics.x = @x
     @graphics.y = @y
 
-update = ->
-  game_state.update(game.time.elapsed/1000.0)
-
-create = ->
-  game.stage.backgroundColor = "88F"
-  game.input.onTap.add ->
-    game_state.new_ball game.input.activePointer.worldX, game.input.activePointer.worldY
-
-game_state = new GameState
-game = new Phaser.Game(size_x, size_y, Phaser.AUTO, '', { create: create, update: update })
+game = new Phaser.Game(size_x, size_y)
+game.state.add("Game", GameState, true)
