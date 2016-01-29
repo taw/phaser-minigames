@@ -3,7 +3,7 @@ size_x = window.innerWidth
 size_y = window.innerHeight
 
 randint = (a,b) ->
-  a + Math.floor(Math.random() * (b-a))
+  a + Math.floor(Math.random() * (b-a+1))
 
 random_color = ->
   Math.random() * 0xFFFFFF
@@ -37,7 +37,7 @@ class Shape
     @graphics = game.add.graphics(@x, @y)
     @graphics.lineStyle(0)
     @graphics.beginFill(random_color())
-    switch randint(0, 2)
+    switch randint(0, 1)
       when 0
         @graphics.drawCircle(0, 0, randint(5, 100))
       when 1

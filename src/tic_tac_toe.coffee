@@ -2,6 +2,9 @@ Phaser = window.Phaser
 size_x = window.innerWidth
 size_y = window.innerHeight
 
+randint = (a,b) ->
+  a + Math.floor(Math.random() * (b-a+1))
+
 class GameState
   constructor: ->
     null
@@ -17,9 +20,19 @@ class GameState
     for y in [0..2]
       for x in [0..2]
         @content_cells[y][x].text = @content[y][x]
+    switch @winner
+      when "X"
+        @winnerText.text = "X won"
+      when "O"
+        @winnerText.text = "O won"
+      when "Draw"
+        @winnerText.text = "DRAW"
+      else
+        @winnerText.text = "Game goes on"
 
   create: ->
     @winner = null
+    @winnerText = game.add.text(16, 16, '', { fontSize: '32px', fill: '#fff' })
     @content = (("?" for x in [0..2]) for y in [0..2])
     @content_cells = ((@new_cell(x, y) for x in [0..2]) for y in [0..2])
     @game.stage.backgroundColor = "F88"
@@ -60,11 +73,21 @@ class GameState
         @winner = "X"
       if JSON.stringify(values) == JSON.stringify(["O", "O", "O"])
         @winner = "O"
+    if @winner == null
+      @winner = "Draw"
+      for y in [0..2]
+        for x in [0..2]
+          if @content[y][x] == "?"
+            @winner = null
 
   ai_movement: ->
     return if @winner != null
-    # TODO
-    null
+    while true
+      x = randint(0,2)
+      y = randint(0,2)
+      if @content[y][x] == "?"
+        @content[y][x] = "O"
+        break
 
   click_cell: (x,y) ->
     return if @winner != null
@@ -72,6 +95,7 @@ class GameState
       @content[y][x] = "X"
       @check_who_won()
       @ai_movement()
+      @check_who_won()
 
 game = new Phaser.Game(size_x, size_y)
 game.state.add("Game", GameState, true)

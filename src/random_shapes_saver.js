@@ -9,7 +9,7 @@
   size_y = window.innerHeight;
 
   randint = function(a, b) {
-    return a + Math.floor(Math.random() * (b - a));
+    return a + Math.floor(Math.random() * (b - a + 1));
   };
 
   random_color = function() {
@@ -59,7 +59,7 @@
       this.graphics = game.add.graphics(this.x, this.y);
       this.graphics.lineStyle(0);
       this.graphics.beginFill(random_color());
-      switch (randint(0, 2)) {
+      switch (randint(0, 1)) {
         case 0:
           this.graphics.drawCircle(0, 0, randint(5, 100));
           break;

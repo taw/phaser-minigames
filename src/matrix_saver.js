@@ -9,7 +9,7 @@
   size_y = window.innerHeight;
 
   randint = function(a, b) {
-    return a + Math.floor(Math.random() * (b - a));
+    return a + Math.floor(Math.random() * (b - a + 1));
   };
 
   GameState = (function() {

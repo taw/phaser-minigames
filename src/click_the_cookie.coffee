@@ -3,7 +3,7 @@ size_x = window.innerWidth
 size_y = window.innerHeight
 
 randint = (a,b) ->
-  a + Math.floor(Math.random() * (b-a))
+  a + Math.floor(Math.random() * (b-a+1))
 
 class GameState
   constructor: ->
