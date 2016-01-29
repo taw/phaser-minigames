@@ -13,10 +13,17 @@
       null;
     }
 
+    GameState.prototype.interpolate_angle = function(distance, angle_ratio) {
+      var a, x, y;
+      x = size_x / 2 + distance * Math.sin(Math.PI * 2 * angle_ratio);
+      y = size_y / 2 - distance * Math.cos(Math.PI * 2 * angle_ratio);
+      a = 360 * angle_ratio;
+      return [x, y, a];
+    };
+
     GameState.prototype.hour_text = function(i) {
-      var label, text, x, y;
-      x = size_x / 2 + 200 * Math.sin(Math.PI * 2 * i / 24);
-      y = size_y / 2 - 200 * Math.cos(Math.PI * 2 * i / 24);
+      var angle, label, ref, text, x, y;
+      ref = this.interpolate_angle(200, i / 24), x = ref[0], y = ref[1], angle = ref[2];
       label = "" + i;
       text = new Phaser.Text(game, x, y, label, {
         font: "20px Arial",
@@ -24,14 +31,13 @@
         align: "center"
       });
       text.anchor.set(0.5);
-      text.angle = 360 * i / 24;
+      text.angle = angle;
       return game.add.existing(text);
     };
 
     GameState.prototype.minute_text = function(i) {
-      var label, text, x, y;
-      x = size_x / 2 + 300 * Math.sin(Math.PI * 2 * i / 60);
-      y = size_y / 2 - 300 * Math.cos(Math.PI * 2 * i / 60);
+      var angle, label, ref, text, x, y;
+      ref = this.interpolate_angle(275, i / 60), x = ref[0], y = ref[1], angle = ref[2];
       label = "" + i;
       text = new Phaser.Text(game, x, y, label, {
         font: "20px Arial",
@@ -39,14 +45,13 @@
         align: "center"
       });
       text.anchor.set(0.5);
-      text.angle = 360 * i / 60;
+      text.angle = angle;
       return game.add.existing(text);
     };
 
     GameState.prototype.second_text = function(i) {
-      var label, text, x, y;
-      x = size_x / 2 + 400 * Math.sin(Math.PI * 2 * i / 60);
-      y = size_y / 2 - 400 * Math.cos(Math.PI * 2 * i / 60);
+      var angle, label, ref, text, x, y;
+      ref = this.interpolate_angle(350, i / 60), x = ref[0], y = ref[1], angle = ref[2];
       label = "" + i;
       text = new Phaser.Text(game, x, y, label, {
         font: "20px Arial",
@@ -54,7 +59,7 @@
         align: "center"
       });
       text.anchor.set(0.5);
-      text.angle = 360 * i / 60;
+      text.angle = angle;
       return game.add.existing(text);
     };
 
