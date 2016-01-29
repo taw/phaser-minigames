@@ -3,5 +3,5 @@ task "httpd" do
 end
 
 task "coffee" do
-  system "coffee -wc src/game.coffee"
+  system "coffee -wc src/*.coffee"
 end
