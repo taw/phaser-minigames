@@ -27,7 +27,7 @@ class GameState
       s.update(dt)
 
   create: ->
-    @game.stage.backgroundColor = "040"
+    @game.stage.backgroundColor = "002"
 
 class Shape
   constructor: ->
@@ -37,7 +37,20 @@ class Shape
     @graphics = game.add.graphics(@x, @y)
     @graphics.lineStyle(0)
     @graphics.beginFill(random_color())
-    @graphics.drawCircle(0, 0, randint(5, 100))
+    switch randint(0, 2)
+      when 0
+        @graphics.drawCircle(0, 0, randint(5, 100))
+      when 1
+        @graphics.drawPolygon([
+          0,
+          0,
+          randint(-50, 50),
+          randint(-50, 50),
+          randint(-50, 50),
+          randint(-50, 50),
+        ])
+
+
     @graphics.endFill()
 
   update: (dt) ->

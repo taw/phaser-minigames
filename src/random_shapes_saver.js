@@ -44,7 +44,7 @@
     };
 
     GameState.prototype.create = function() {
-      return this.game.stage.backgroundColor = "040";
+      return this.game.stage.backgroundColor = "002";
     };
 
     return GameState;
@@ -59,7 +59,13 @@
       this.graphics = game.add.graphics(this.x, this.y);
       this.graphics.lineStyle(0);
       this.graphics.beginFill(random_color());
-      this.graphics.drawCircle(0, 0, randint(5, 100));
+      switch (randint(0, 2)) {
+        case 0:
+          this.graphics.drawCircle(0, 0, randint(5, 100));
+          break;
+        case 1:
+          this.graphics.drawPolygon([0, 0, randint(-50, 50), randint(-50, 50), randint(-50, 50), randint(-50, 50)]);
+      }
       this.graphics.endFill();
     }
 
