@@ -65,11 +65,12 @@
 
     Character.prototype.update = function(dt) {
       this.y += this.speed * dt;
+      this.graphics.x = this.x;
+      this.graphics.y = this.y;
       if (this.y >= size_y) {
         this.active = false;
+        return this.graphics.destroy();
       }
-      this.graphics.x = this.x;
-      return this.graphics.y = this.y;
     };
 
     return Character;

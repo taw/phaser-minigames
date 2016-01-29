@@ -31,10 +31,11 @@ class Character
 
   update: (dt) ->
     @y += @speed*dt
-    if @y >= size_y
-      @active = false
     @graphics.x = @x
     @graphics.y = @y
+    if @y >= size_y
+      @active = false
+      @graphics.destroy()
 
 game = new Phaser.Game(size_x, size_y)
 game.state.add("Game", GameState, true)
