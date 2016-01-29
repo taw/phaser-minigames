@@ -105,10 +105,14 @@
     };
 
     GameState.prototype.click = function(x, y) {
-      x = Math.floor((x - size_x / 2 + 300) / 200);
-      y = Math.floor((y - size_y / 2 + 300) / 200);
-      if (x >= 0 && x <= 2 && y >= 0 && y <= 2) {
-        return this.click_cell(x, y);
+      if (this.winner === null) {
+        x = Math.floor((x - size_x / 2 + 300) / 200);
+        y = Math.floor((y - size_y / 2 + 300) / 200);
+        if (x >= 0 && x <= 2 && y >= 0 && y <= 2) {
+          return this.click_cell(x, y);
+        }
+      } else {
+        return this.state.restart();
       }
     };
 

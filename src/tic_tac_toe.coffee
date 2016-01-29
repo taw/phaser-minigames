@@ -51,10 +51,13 @@ class GameState
       @click @game.input.activePointer.worldX, @game.input.activePointer.worldY
 
   click: (x,y) ->
-    x = Math.floor( (x - size_x / 2 + 300) / 200 )
-    y = Math.floor( (y - size_y / 2 + 300) / 200 )
-    if x >= 0 and x <= 2 and y >= 0 and y <= 2
-      @click_cell(x,y)
+    if @winner == null
+      x = Math.floor( (x - size_x / 2 + 300) / 200 )
+      y = Math.floor( (y - size_y / 2 + 300) / 200 )
+      if x >= 0 and x <= 2 and y >= 0 and y <= 2
+        @click_cell(x,y)
+    else
+      @state.restart()
 
   check_who_won: ->
     lines = [
