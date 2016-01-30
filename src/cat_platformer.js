@@ -17,7 +17,7 @@
     };
 
     GameState.prototype.update = function() {
-      game.physics.arcade.collide(this.player, this.platform);
+      game.physics.arcade.collide(this.player, this.platforms);
       this.player.body.velocity.x = 0;
       if (this.cursors.left.isDown) {
         this.player.body.velocity.x = -150;
@@ -28,6 +28,15 @@
       if (this.jumpButton.isDown) {
         return this.player.body.velocity.y = -250;
       }
+    };
+
+    GameState.prototype.add_platform = function(x, y) {
+      var platform;
+      platform = this.platforms.create(x, y, 'platform');
+      platform.height = 40;
+      platform.width = 200;
+      platform.anchor.set(0.5);
+      return platform.body.immovable = true;
     };
 
     GameState.prototype.create = function() {
@@ -41,14 +50,16 @@
       this.player.width = 64;
       game.physics.enable(this.player, Phaser.Physics.ARCADE);
       this.player.body.gravity.y = 250;
-      this.player.body.bounce.y = 0.2;
+      this.player.body.bounce.y = 0.5;
       this.player.body.collideWorldBounds = true;
-      this.platform = game.add.sprite(200, size_y - 100, 'platform');
-      this.platform.height = 40;
-      this.platform.width = 200;
-      this.platform.anchor.set(0.5);
-      game.physics.enable(this.platform, Phaser.Physics.ARCADE);
-      return this.platform.body.immovable = true;
+      this.platforms = game.add.group();
+      this.platforms.enableBody = true;
+      this.add_platform(200, size_y - 100);
+      this.add_platform(200, size_y - 300);
+      this.add_platform(200, size_y - 500);
+      this.add_platform(500, size_y - 200);
+      this.add_platform(500, size_y - 400);
+      return this.add_platform(500, size_y - 600);
     };
 
     return GameState;
