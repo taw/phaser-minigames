@@ -1,0 +1,75 @@
+#!/usr/bin/env ruby
+
+require "pathname"
+
+class MakeNewGame
+  def initialize(name, title)
+    @name = name
+    @title = title
+  end
+
+  def run!
+    coffee!
+    html!
+    index!
+  end
+
+  def coffee!
+    if game_coffee_path.exist?
+      puts "#{game_coffee_path} already exists"
+    else
+      game_coffee_path.write(empty_coffee_path.read)
+    end
+  end
+
+  def html!
+    if game_html_path.exist?
+      puts "#{game_html_path} already exists"
+    else
+      game_html_path.write(
+        empty_html_path.read
+                       .sub("<title>Empty Game</title>", "<title>#{@title}</title>")
+                       .sub("/src/empty.js", "/src/#{@name}.js")
+      )
+    end
+  end
+
+  def index!
+    if index_path.read.include?("games/#{@name}")
+      puts "Index already includes link to #{@name}"
+    else
+      index_path.write(
+        index_path.read.sub(
+          %r[(?= *</ul>)],
+          %Q[    <li><a href="games/#{@name}.html">#{@title}</a></li>\n]
+        )
+      )
+    end
+  end
+
+  def index_path
+    Pathname("index.html")
+  end
+
+  def empty_coffee_path
+    Pathname("src/empty.coffee")
+  end
+
+  def game_coffee_path
+    Pathname("src/#{@name}.coffee")
+  end
+
+  def empty_html_path
+    Pathname("games/empty.html")
+  end
+
+  def game_html_path
+    Pathname("games/#{@name}.html")
+  end
+end
+
+unless ARGV.size == 2
+  STDERR.puts %Q[Usage: #{$0} "game_file_name" "Game Title"]
+end
+
+MakeNewGame.new(*ARGV).run!
