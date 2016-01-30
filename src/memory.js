@@ -148,13 +148,11 @@
     function GameState() {}
 
     GameState.prototype.preload = function() {
-      var i, k, results;
-      results = [];
+      var i, k;
       for (i = k = 1; k <= 18; i = ++k) {
         this.game.load.image("cat" + i, "/images/cat_images/cat" + i + ".png");
-        results.push(this.game.load.audio("meow", "/audio/cat_meow.mp3"));
       }
-      return results;
+      return this.game.load.audio("meow", "/audio/cat_meow.mp3");
     };
 
     GameState.prototype.update = function() {
