@@ -78,6 +78,7 @@ class Board
           @grid[@x1][@y1].set_status("revealed")
           @grid[x][y].set_status("revealed")
           @status = "ready"
+          game.add.audio("meow").play()
           true
         else
           @grid[x][y].set_status("peek")
@@ -96,6 +97,7 @@ class GameState
   preload: ->
     for i in [1..18]
       @game.load.image("cat#{i}", "/images/cat_images/cat#{i}.png")
+      @game.load.audio("meow", "/audio/cat_meow.mp3")
 
   update: ->
     @scoreText.text = "Clicks: #{@score}"

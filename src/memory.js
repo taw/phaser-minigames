@@ -121,6 +121,7 @@
             this.grid[this.x1][this.y1].set_status("revealed");
             this.grid[x][y].set_status("revealed");
             this.status = "ready";
+            game.add.audio("meow").play();
             return true;
           } else {
             this.grid[x][y].set_status("peek");
@@ -150,7 +151,8 @@
       var i, k, results;
       results = [];
       for (i = k = 1; k <= 18; i = ++k) {
-        results.push(this.game.load.image("cat" + i, "/images/cat_images/cat" + i + ".png"));
+        this.game.load.image("cat" + i, "/images/cat_images/cat" + i + ".png");
+        results.push(this.game.load.audio("meow", "/audio/cat_meow.mp3"));
       }
       return results;
     };
