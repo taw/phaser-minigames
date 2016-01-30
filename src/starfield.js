@@ -19,10 +19,8 @@
       var angle, speed;
       angle = Math.random() * 2 * Math.PI;
       speed = randint(50, 400);
-      star_sprite.x = size_x / 2;
-      star_sprite.y = size_y / 2;
-      star_sprite.body.velocity.x = Math.cos(angle) * speed;
-      return star_sprite.body.velocity.y = Math.sin(angle) * speed;
+      star_sprite.x = size_x / 2 + randint(-50, 50);
+      return star_sprite.y = size_y / 2 + randint(-50, 50);
     };
 
     GameState.prototype.new_star = function() {
@@ -44,6 +42,8 @@
       results = [];
       for (j = 0, len = ref.length; j < len; j++) {
         star_sprite = ref[j];
+        star_sprite.body.velocity.x = 1 * (star_sprite.x - size_x / 2);
+        star_sprite.body.velocity.y = 1 * (star_sprite.y - size_y / 2);
         if (star_sprite.x < 0 || star_sprite.y < 0 || star_sprite.x >= size_x || star_sprite.y >= size_y) {
           results.push(this.reset_star_position(star_sprite));
         } else {

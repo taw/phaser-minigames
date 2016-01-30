@@ -9,10 +9,8 @@ class GameState
   reset_star_position: (star_sprite) ->
     angle = Math.random() * 2 * Math.PI
     speed = randint(50, 400)
-    star_sprite.x = size_x/2
-    star_sprite.y = size_y/2
-    star_sprite.body.velocity.x = Math.cos(angle) * speed
-    star_sprite.body.velocity.y = Math.sin(angle) * speed
+    star_sprite.x = size_x/2 + randint(-50, 50)
+    star_sprite.y = size_y/2 + randint(-50, 50)
 
   new_star: ->
     star = game.add.graphics(0, 0)
@@ -27,6 +25,8 @@ class GameState
 
   update: ->
     for star_sprite in @stars
+      star_sprite.body.velocity.x = 1 * (star_sprite.x - size_x/2)
+      star_sprite.body.velocity.y = 1 * (star_sprite.y - size_y/2)
       if star_sprite.x < 0 or star_sprite.y < 0 or star_sprite.x >= size_x or star_sprite.y >= size_y
         @reset_star_position(star_sprite)
 
