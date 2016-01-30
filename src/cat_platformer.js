@@ -12,10 +12,12 @@
     function GameState() {}
 
     GameState.prototype.preload = function() {
-      return this.game.load.image("cat", "/images/cat_images/cat17.png");
+      this.game.load.image("cat", "/images/cat_images/cat17.png");
+      return this.game.load.image("platform", "/images/grass_platform.png");
     };
 
     GameState.prototype.update = function() {
+      game.physics.arcade.collide(this.player, this.platform);
       this.player.body.velocity.x = 0;
       if (this.cursors.left.isDown) {
         this.player.body.velocity.x = -150;
@@ -23,7 +25,7 @@
       if (this.cursors.right.isDown) {
         this.player.body.velocity.x = 150;
       }
-      if (this.jumpButton.isDown && this.player.body.onFloor()) {
+      if (this.jumpButton.isDown) {
         return this.player.body.velocity.y = -250;
       }
     };
@@ -31,15 +33,22 @@
     GameState.prototype.create = function() {
       this.game.stage.backgroundColor = "8F8";
       game.physics.startSystem(Phaser.Physics.ARCADE);
-      game.physics.arcade.gravity.y = 250;
-      this.player = game.add.sprite(size_x / 2, size_y / 2, 'cat');
+      this.cursors = game.input.keyboard.createCursorKeys();
+      this.jumpButton = game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
+      this.player = game.add.sprite(size_x / 2, size_y - 100, 'cat');
+      this.player.anchor.set(0.5);
       this.player.height = 64;
       this.player.width = 64;
       game.physics.enable(this.player, Phaser.Physics.ARCADE);
-      this.player.body.bounce.y = 0.5;
+      this.player.body.gravity.y = 250;
+      this.player.body.bounce.y = 0.2;
       this.player.body.collideWorldBounds = true;
-      this.cursors = game.input.keyboard.createCursorKeys();
-      return this.jumpButton = game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
+      this.platform = game.add.sprite(200, size_y - 100, 'platform');
+      this.platform.height = 40;
+      this.platform.width = 200;
+      this.platform.anchor.set(0.5);
+      game.physics.enable(this.platform, Phaser.Physics.ARCADE);
+      return this.platform.body.immovable = true;
     };
 
     return GameState;
