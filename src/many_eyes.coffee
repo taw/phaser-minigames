@@ -33,9 +33,6 @@ class Eye
     @retina.y = @y + dy
 
 class GameState
-  constructor: ->
-    null
-
   update: ->
     for eye in @eyes
       eye.update(

@@ -3,9 +3,6 @@ size_x = window.innerWidth
 size_y = window.innerHeight
 
 class GameState
-  constructor: ->
-    null
-
   update: ->
     null
 

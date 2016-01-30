@@ -13,9 +13,7 @@
   };
 
   GameState = (function() {
-    function GameState() {
-      this.characters = [];
-    }
+    function GameState() {}
 
     GameState.prototype.update = function() {
       var c, dt, i, len, ref;
@@ -43,6 +41,7 @@
     };
 
     GameState.prototype.create = function() {
+      this.characters = [];
       return this.game.stage.backgroundColor = "444";
     };
 

@@ -48,9 +48,7 @@
   })();
 
   GameState = (function() {
-    function GameState() {
-      null;
-    }
+    function GameState() {}
 
     GameState.prototype.update = function() {
       var eye, j, len, ref, results;

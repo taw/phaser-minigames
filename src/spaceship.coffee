@@ -61,9 +61,6 @@ class SpaceShip
     @angle += dir * dt * degrees_per_second
 
 class GameState
-  constructor: ->
-    null
-
   update: ->
     dt = @game.time.elapsed/1000.0
     if game.input.keyboard.isDown(Phaser.KeyCode.UP)

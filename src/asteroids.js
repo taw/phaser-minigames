@@ -128,9 +128,7 @@
   })();
 
   GameState = (function() {
-    function GameState() {
-      null;
-    }
+    function GameState() {}
 
     GameState.prototype.collision = function(a, b) {
       var dx, dy;

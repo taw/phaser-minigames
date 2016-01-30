@@ -9,9 +9,7 @@
   size_y = window.innerHeight;
 
   GameState = (function() {
-    function GameState() {
-      null;
-    }
+    function GameState() {}
 
     GameState.prototype.update = function() {
       var dl, dx, dy;
