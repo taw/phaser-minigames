@@ -14,23 +14,65 @@
 
   Cell = (function() {
     function Cell(x, y, c) {
+      var label, style;
       this.x = x;
       this.y = y;
       this.c = c;
-      this.grid = game.add.graphics(this.x, this.y);
-      this.grid.lineStyle(2, 0x000000, 1);
-      this.grid.drawPolygon(-20, -20, -20, 20, 20, 20, 20, -20, -20, -20);
-      this.text = new Phaser.Text(game, this.x, this.y, this.c, {
+      this.revealed = false;
+      this.grid_hidden = game.add.graphics(this.x, this.y);
+      this.grid_hidden.lineStyle(2, 0x000000, 1);
+      this.grid_hidden.beginFill(0x888888);
+      this.grid_hidden.drawPolygon(-20, -20, -20, 20, 20, 20, 20, -20, -20, -20);
+      this.grid_hidden.endFill();
+      this.grid_visible = game.add.graphics(this.x, this.y);
+      this.grid_visible.lineStyle(2, 0x000000, 1);
+      if (this.c === "X") {
+        this.grid_visible.beginFill(0xFFAAAA);
+      } else {
+        this.grid_visible.beginFill(0xAAAAAA);
+      }
+      this.grid_visible.drawPolygon(-20, -20, -20, 20, 20, 20, 20, -20, -20, -20);
+      this.grid_visible.endFill();
+      this.grid_visible.visible = false;
+      label = this.c;
+      style = {
         align: "center",
         fontSize: "16px"
-      });
+      };
+      switch (this.c) {
+        case 0:
+          label = "";
+          break;
+        case 1:
+        case 5:
+          style.fill = "#0000FF";
+          break;
+        case 2:
+        case 6:
+          style.fill = "#00FF00";
+          break;
+        case 3:
+        case 7:
+          style.fill = "#FF0000";
+          break;
+        case 4:
+        case 8:
+          style.fill = "#FF00FF";
+          break;
+        default:
+          null;
+      }
+      this.text = new Phaser.Text(game, this.x, this.y, label, style);
       this.text.anchor.set(0.5);
       this.text.visible = false;
       game.add.existing(this.text);
     }
 
     Cell.prototype.reveal = function() {
-      return this.text.visible = true;
+      this.revealed = true;
+      this.text.visible = true;
+      this.grid_hidden.visible = false;
+      return this.grid_visible.visible = true;
     };
 
     return Cell;
@@ -63,8 +105,34 @@
       this.setup_grid();
     }
 
+    Board.prototype.auto_propagate_reveal = function(x, y) {
+      if (x < 0 || x >= this.size_x) {
+        return;
+      }
+      if (y < 0 || y >= this.size_y) {
+        return;
+      }
+      if (this.grid[x][y].revealed) {
+        return;
+      }
+      return this.click_cell(x, y);
+    };
+
     Board.prototype.click_cell = function(x, y) {
-      return this.grid[x][y].reveal();
+      if (this.grid[x][y].revealed) {
+        return;
+      }
+      this.grid[x][y].reveal();
+      if (this.grid[x][y].c === 0) {
+        this.auto_propagate_reveal(x - 1, y - 1);
+        this.auto_propagate_reveal(x - 1, y);
+        this.auto_propagate_reveal(x - 1, y + 1);
+        this.auto_propagate_reveal(x, y - 1);
+        this.auto_propagate_reveal(x, y + 1);
+        this.auto_propagate_reveal(x + 1, y - 1);
+        this.auto_propagate_reveal(x + 1, y);
+        return this.auto_propagate_reveal(x + 1, y + 1);
+      }
     };
 
     Board.prototype.setup_grid = function() {
@@ -157,7 +225,7 @@
     }
 
     GameState.prototype.update = function() {
-      return null;
+      return this.result.text = "Have fun playing";
     };
 
     GameState.prototype.click = function(x, y) {
@@ -169,6 +237,10 @@
     };
 
     GameState.prototype.create = function() {
+      this.result = game.add.text(16, 16, '', {
+        fontSize: '32px',
+        fill: '#fff'
+      });
       this.game.stage.backgroundColor = "8F8";
       this.board = new Board;
       return this.game.input.onTap.add((function(_this) {
