@@ -5,5 +5,5 @@ end
 
 desc "Autocompile coffeescript"
 task "coffee" do
-  system "coffee -wc src/*.coffee"
+  system "coffee -wc src/"
 end
