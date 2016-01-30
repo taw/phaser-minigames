@@ -26,10 +26,10 @@
       this.x = x;
       this.y = y;
       this.c = c;
-      this.status = null;
+      this.status = "hidden";
       this.bg = game.add.graphics(this.x, this.y);
       this.bg.lineStyle(2, 0x000000, 1);
-      this.bg.beginFill(0x888888);
+      this.bg.beginFill(0xFF8888);
       this.bg.drawPolygon(-48, -48, -48, 48, 48, 48, 48, -48, -48, -48);
       this.tile = game.add.sprite(this.x, this.y, "cat" + c);
       this.tile.anchor.setTo(0.5, 0.5);
@@ -39,6 +39,19 @@
       this.hidden_tile = game.add.text(this.x, this.y, "?");
       this.hidden_tile.anchor.setTo(0.5, 0.5);
     }
+
+    Tile.prototype.set_status = function(status) {
+      this.status = status;
+      switch (status) {
+        case "hidden":
+          this.tile.visible = false;
+          return this.hidden_tile.visible = true;
+        case "peek":
+        case "revealed":
+          this.tile.visible = true;
+          return this.hidden_tile.visible = false;
+      }
+    };
 
     return Tile;
 
@@ -66,6 +79,7 @@
         return results;
       }).call(this);
       this.setup_grid();
+      this.status = "ready";
     }
 
     Board.prototype.setup_grid = function() {
@@ -89,6 +103,39 @@
       }).call(this);
     };
 
+    Board.prototype.click_cell = function(x, y) {
+      if (this.grid[x][y].status === "revealed") {
+        return;
+      }
+      switch (this.status) {
+        case "ready":
+          this.grid[x][y].set_status("peek");
+          this.x1 = x;
+          this.y1 = y;
+          return this.status = "one";
+        case "one":
+          if (x === this.x1 && y === this.y1) {
+            return;
+          }
+          if (this.grid[x][y].c === this.grid[this.x1][this.y1].c) {
+            this.grid[this.x1][this.y1].set_status("revealed");
+            this.grid[x][y].set_status("revealed");
+            return this.status = "ready";
+          } else {
+            this.grid[x][y].set_status("peek");
+            this.x2 = x;
+            this.y2 = y;
+            return this.status = "two";
+          }
+          break;
+        case "two":
+          this.grid[this.x1][this.y1].set_status("hidden");
+          this.grid[this.x2][this.y2].set_status("hidden");
+          this.status = "ready";
+          return this.click_cell(x, y);
+      }
+    };
+
     return Board;
 
   })();
@@ -110,8 +157,8 @@
     };
 
     GameState.prototype.click = function(x, y) {
-      x = Math.floor((x - size_x / 2 + 200) / 40);
-      y = Math.floor((y - size_y / 2 + 200) / 40);
+      x = Math.round((x - size_x / 2 + 96 * 2.5) / 96);
+      y = Math.round((y - size_y / 2 + 96 * 2.5) / 96);
       if (x >= 0 && x <= this.board.size_x - 1 && y >= 0 && y <= this.board.size_y - 1) {
         return this.board.click_cell(x, y);
       }
