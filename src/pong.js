@@ -111,7 +111,7 @@ GameState = (function() {
     this.right_paddle.lineStyle(0);
     this.right_paddle.beginFill(0x000);
     this.right_paddle.drawRect(0, -65, 30, 130);
-    this.ball = game.add.graphics(size_x / 2, size_y / 2);
+    this.ball = game.add.graphics(size_x / 4, size_y / 4);
     this.ball.lineStyle(0);
     this.ball.beginFill(0x000);
     this.ball.drawCircle(0, 0, 50);
