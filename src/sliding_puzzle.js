@@ -111,6 +111,24 @@ Board = (function() {
 
   Board.prototype.check_if_completed = function(x, y) {
     var cell, row;
+    console.log(JSON.stringify((function() {
+      var k, len, ref, results;
+      ref = this.grid;
+      results = [];
+      for (k = 0, len = ref.length; k < len; k++) {
+        row = ref[k];
+        results.push((function() {
+          var l, len1, results1;
+          results1 = [];
+          for (l = 0, len1 = row.length; l < len1; l++) {
+            cell = row[l];
+            results1.push(cell.c);
+          }
+          return results1;
+        })());
+      }
+      return results;
+    }).call(this)));
     if (JSON.stringify((function() {
       var k, len, ref, results;
       ref = this.grid;
@@ -128,11 +146,8 @@ Board = (function() {
         })());
       }
       return results;
-    }).call(this)) === JSON.stringify([[0, 1, 2, 3], [4, 5, 6, 7], [8, 9, 10, 11], [12, 13, 14, 15]])) {
-      return this.completedText = game.add.text(16, 16, 'Completed in #{@score} moves!', {
-        fontSize: '32px',
-        fill: '#fff'
-      });
+    }).call(this)) === JSON.stringify([[0, 4, 8, 12], [1, 5, 9, 13], [2, 6, 10, 14], [3, 7, 11, 15]])) {
+      return this.game_won = true;
     }
   };
 
@@ -155,10 +170,16 @@ GameState = (function() {
   };
 
   GameState.prototype.update = function() {
-    return this.scoreText.text = "Clicks: " + this.score;
+    this.scoreText.text = "Clicks: " + this.score;
+    if (this.board.game_won === true) {
+      return this.completedText.text = "Completed in " + this.score + " moves!";
+    }
   };
 
   GameState.prototype.click = function(x, y) {
+    if (this.board.game_won === true) {
+      return;
+    }
     x = Math.round((x - size_x / 2 + 192 * 1.5) / 192);
     y = Math.round((y - size_y / 2 + 108 * 1.5) / 108);
     if (x >= 0 && x <= this.board.size_x - 1 && y >= 0 && y <= this.board.size_y - 1) {
@@ -171,6 +192,10 @@ GameState = (function() {
   GameState.prototype.create = function() {
     this.score = 0;
     this.scoreText = game.add.text(16, 16, '', {
+      fontSize: '32px',
+      fill: '#fff'
+    });
+    this.completedText = game.add.text(56, 56, '', {
       fontSize: '32px',
       fill: '#fff'
     });

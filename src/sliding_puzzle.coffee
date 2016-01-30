@@ -64,9 +64,9 @@ class Board
     false
 
   check_if_completed: (x,y) ->
-    if JSON.stringify(((cell.c for cell in row) for row in @grid)) == JSON.stringify([[0,1,2,3],[4,5,6,7],[8,9,10,11],[12,13,14,15]])
-      @completedText = game.add.text(16, 16, 'Completed in #{@score} moves!', { fontSize: '32px', fill: '#fff' })
-
+    console.log(JSON.stringify(((cell.c for cell in row) for row in @grid)))
+    if JSON.stringify(((cell.c for cell in row) for row in @grid)) == JSON.stringify([[0,4,8,12],[1,5,9,13],[2,6,10,14],[3,7,11,15]])
+      @game_won = true
 
 class GameState
   constructor: ->
@@ -78,8 +78,10 @@ class GameState
 
   update: ->
     @scoreText.text = "Clicks: #{@score}"
+    @completedText.text = "Completed in #{@score} moves!" if @board.game_won == true
 
   click: (x,y) ->
+    return if @board.game_won == true
     x = Math.round((x - size_x / 2 + 192*1.5) / 192)
     y = Math.round((y - size_y / 2 + 108*1.5) / 108)
     if x >= 0 and x <= @board.size_x-1 and y >= 0 and y <= @board.size_y-1
@@ -89,6 +91,7 @@ class GameState
   create: ->
     @score = 0
     @scoreText = game.add.text(16, 16, '', { fontSize: '32px', fill: '#fff' })
+    @completedText = game.add.text(56, 56, '', { fontSize: '32px', fill: '#fff' })
     @game.stage.backgroundColor = "F88"
     @board = new Board
     @game.input.onTap.add =>
