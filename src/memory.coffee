@@ -62,8 +62,7 @@ class Board
         new Tile(loc_x,loc_y,@content[x][y])
 
   click_cell: (x,y) ->
-    return if @grid[x][y].status == "revealed"
-    # TODO: do not allow click twice
+    return false if @grid[x][y].status == "revealed"
 
     switch @status
       when "ready"
@@ -71,22 +70,27 @@ class Board
         @x1 = x
         @y1 = y
         @status = "one"
+        false
       when "one"
-        return if x == @x1 and y == @y1
-        if @grid[x][y].c == @grid[@x1][@y1].c
+        if x == @x1 and y == @y1
+          false
+        else if @grid[x][y].c == @grid[@x1][@y1].c
           @grid[@x1][@y1].set_status("revealed")
           @grid[x][y].set_status("revealed")
           @status = "ready"
+          true
         else
           @grid[x][y].set_status("peek")
           @x2 = x
           @y2 = y
           @status = "two"
+          true
       when "two"
         @grid[@x1][@y1].set_status("hidden")
         @grid[@x2][@y2].set_status("hidden")
         @status = "ready"
         @click_cell(x, y)
+        false
 
 class GameState
   preload: ->
@@ -94,15 +98,18 @@ class GameState
       @game.load.image("cat#{i}", "/images/cat_images/cat#{i}.png")
 
   update: ->
-    null
+    @scoreText.text = "Clicks: #{@score}"
 
   click: (x,y) ->
     x = Math.round((x - size_x / 2 + 96*2.5) / 96)
     y = Math.round((y - size_y / 2 + 96*2.5) / 96)
     if x >= 0 and x <= @board.size_x-1 and y >= 0 and y <= @board.size_y-1
-      @board.click_cell(x,y)
+      if @board.click_cell(x,y)
+        @score += 1
 
   create: ->
+    @score = 0
+    @scoreText = game.add.text(16, 16, '', { fontSize: '32px', fill: '#fff' })
     @game.stage.backgroundColor = "88F"
     @board = new Board
     @game.input.onTap.add =>
