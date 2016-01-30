@@ -17,11 +17,21 @@
       this.x = x;
       this.y = y;
       this.c = c;
-      this.revealed = false;
       this.grid = game.add.graphics(this.x, this.y);
       this.grid.lineStyle(2, 0x000000, 1);
-      this.grid.drawPolygon(-10, -10, -10, 10, 10, 10, 10, -10, -10, -10);
+      this.grid.drawPolygon(-20, -20, -20, 20, 20, 20, 20, -20, -20, -20);
+      this.text = new Phaser.Text(game, this.x, this.y, this.c, {
+        align: "center",
+        fontSize: "16px"
+      });
+      this.text.anchor.set(0.5);
+      this.text.visible = false;
+      game.add.existing(this.text);
     }
+
+    Cell.prototype.reveal = function() {
+      return this.text.visible = true;
+    };
 
     return Cell;
 
@@ -53,6 +63,10 @@
       this.setup_grid();
     }
 
+    Board.prototype.click_cell = function(x, y) {
+      return this.grid[x][y].reveal();
+    };
+
     Board.prototype.setup_grid = function() {
       var loc_x, loc_y, x, y;
       return this.grid = (function() {
@@ -63,8 +77,8 @@
             var j, ref1, results1;
             results1 = [];
             for (y = j = 0, ref1 = this.size_y; 0 <= ref1 ? j < ref1 : j > ref1; y = 0 <= ref1 ? ++j : --j) {
-              loc_x = (size_x / 2 - 90) + 20 * x;
-              loc_y = (size_y / 2 - 90) + 20 * y;
+              loc_x = (size_x / 2 - 180) + 40 * x;
+              loc_y = (size_y / 2 - 180) + 40 * y;
               results1.push(new Cell(loc_x, loc_y, this.content[x][y]));
             }
             return results1;
@@ -146,9 +160,22 @@
       return null;
     };
 
+    GameState.prototype.click = function(x, y) {
+      x = Math.floor((x - size_x / 2 + 200) / 40);
+      y = Math.floor((y - size_y / 2 + 200) / 40);
+      if (x >= 0 && x <= this.board.size_x - 1 && y >= 0 && y <= this.board.size_y - 1) {
+        return this.board.click_cell(x, y);
+      }
+    };
+
     GameState.prototype.create = function() {
       this.game.stage.backgroundColor = "8F8";
-      return this.board = new Board;
+      this.board = new Board;
+      return this.game.input.onTap.add((function(_this) {
+        return function() {
+          return _this.click(_this.game.input.activePointer.worldX, _this.game.input.activePointer.worldY);
+        };
+      })(this));
     };
 
     return GameState;
