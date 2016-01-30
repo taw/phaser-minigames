@@ -3,9 +3,6 @@ size_x = window.innerWidth
 size_y = window.innerHeight
 
 class GameState
-  constructor: ->
-    @balls = []
-
   new_ball: (x,y) ->
     @balls.push new Ball(x, y)
 
@@ -16,6 +13,7 @@ class GameState
       ball.update(dt)
 
   create: ->
+    @balls = []
     @game.stage.backgroundColor = "88F"
     @game.input.onTap.add =>
       @new_ball @game.input.activePointer.worldX, @game.input.activePointer.worldY

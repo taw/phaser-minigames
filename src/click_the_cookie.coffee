@@ -6,9 +6,6 @@ randint = (a,b) ->
   a + Math.floor(Math.random() * (b-a+1))
 
 class GameState
-  constructor: ->
-    null
-
   preload: ->
     @game.load.image('cookie', '/images/cookie.png')
 

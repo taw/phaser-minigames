@@ -13,9 +13,7 @@
   };
 
   GameState = (function() {
-    function GameState() {
-      null;
-    }
+    function GameState() {}
 
     GameState.prototype.preload = function() {
       return this.game.load.image('cookie', '/images/cookie.png');

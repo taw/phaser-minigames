@@ -126,9 +126,6 @@ class Board
         @content[x][y] = @mines_near_xy(x, y)
 
 class GameState
-  constructor: ->
-    null
-
   update: ->
     @result.text = "Have fun playing"
 

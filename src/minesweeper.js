@@ -220,9 +220,7 @@
   })();
 
   GameState = (function() {
-    function GameState() {
-      null;
-    }
+    function GameState() {}
 
     GameState.prototype.update = function() {
       return this.result.text = "Have fun playing";

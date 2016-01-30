@@ -9,9 +9,7 @@
   size_y = window.innerHeight;
 
   GameState = (function() {
-    function GameState() {
-      this.balls = [];
-    }
+    function GameState() {}
 
     GameState.prototype.new_ball = function(x, y) {
       return this.balls.push(new Ball(x, y));
@@ -30,6 +28,7 @@
     };
 
     GameState.prototype.create = function() {
+      this.balls = [];
       this.game.stage.backgroundColor = "88F";
       return this.game.input.onTap.add((function(_this) {
         return function() {

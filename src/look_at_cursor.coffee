@@ -3,9 +3,6 @@ size_x = window.innerWidth
 size_y = window.innerHeight
 
 class GameState
-  constructor: ->
-    null
-
   update: ->
     dx = @game.input.activePointer.worldX - size_x/2
     dy = @game.input.activePointer.worldY - size_y/2

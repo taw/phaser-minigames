@@ -6,9 +6,6 @@ randint = (a,b) ->
   a + Math.floor(Math.random() * (b-a+1))
 
 class GameState
-  constructor: ->
-    @characters = []
-
   update: ->
     dt = @game.time.elapsed/1000.0
     if @characters.length < 1000
@@ -18,6 +15,7 @@ class GameState
     @characters = (c for c in @characters when c.active)
 
   create: ->
+    @characters = []
     @game.stage.backgroundColor = "444"
 
 class Character
