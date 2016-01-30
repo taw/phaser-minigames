@@ -27,23 +27,25 @@
     }
 
     SpaceShip.prototype.ensure_bounds = function() {
-      if (this.graphics.x < 20 && this.dx < 0) {
+      if (this.x < 20 && this.dx < 0) {
         this.dx = -this.dx;
       }
-      if (this.graphics.x > size_x - 20 && this.dx > 0) {
+      if (this.x > size_x - 20 && this.dx > 0) {
         this.dx = -this.dx;
       }
-      if (this.graphics.y < 20 && this.dy < 0) {
+      if (this.y < 20 && this.dy < 0) {
         this.dy = -this.dy;
       }
-      if (this.graphics.y > size_y - 20 && this.dy > 0) {
+      if (this.y > size_y - 20 && this.dy > 0) {
         return this.dy = -this.dy;
       }
     };
 
     SpaceShip.prototype.update = function(dt) {
-      this.graphics.x += this.dx * dt;
-      this.graphics.y += this.dy * dt;
+      this.x += this.dx * dt;
+      this.y += this.dy * dt;
+      this.graphics.x = this.x;
+      this.graphics.y = this.y;
       this.graphics.angle = this.angle;
       return this.ensure_bounds();
     };
@@ -90,7 +92,7 @@
       this.x = x;
       this.y = y;
       angle = Math.random() * 2 * Math.PI;
-      speed = Math.random() * 400.0;
+      speed = randint(50, 200);
       this.dx = Math.cos(angle) * speed;
       this.dy = Math.sin(angle) * speed;
       this.graphics = game.add.graphics(this.x, this.y);
@@ -99,22 +101,24 @@
     }
 
     Asteroid.prototype.update = function(dt) {
-      this.graphics.x += this.dx * dt;
-      this.graphics.y += this.dy * dt;
+      this.x += this.dx * dt;
+      this.y += this.dy * dt;
+      this.graphics.x = this.x;
+      this.graphics.y = this.y;
       return this.ensure_bounds();
     };
 
     Asteroid.prototype.ensure_bounds = function() {
-      if (this.graphics.x < 20 && this.dx < 0) {
+      if (this.x < 20 && this.dx < 0) {
         this.dx = -this.dx;
       }
-      if (this.graphics.x > size_x - 20 && this.dx > 0) {
+      if (this.x > size_x - 20 && this.dx > 0) {
         this.dx = -this.dx;
       }
-      if (this.graphics.y < 20 && this.dy < 0) {
+      if (this.y < 20 && this.dy < 0) {
         this.dy = -this.dy;
       }
-      if (this.graphics.y > size_y - 20 && this.dy > 0) {
+      if (this.y > size_y - 20 && this.dy > 0) {
         return this.dy = -this.dy;
       }
     };
@@ -128,8 +132,18 @@
       null;
     }
 
+    GameState.prototype.collision = function(a, b) {
+      var dx, dy;
+      dx = a.x - b.x;
+      dy = a.y - b.y;
+      return Math.sqrt((dx * dx) + (dy * dy)) < 25;
+    };
+
     GameState.prototype.update = function() {
       var a, dt, j, len, ref, results;
+      if (!this.active) {
+        return;
+      }
       dt = this.game.time.elapsed / 1000.0;
       if (game.input.keyboard.isDown(Phaser.KeyCode.UP)) {
         this.space_ship.speed_up(1.0, dt);
@@ -143,18 +157,32 @@
       if (game.input.keyboard.isDown(Phaser.KeyCode.RIGHT)) {
         this.space_ship.turn(1.0, dt);
       }
+      this.score += dt;
+      this.scoreText.text = "You survived " + (this.score.toFixed(3)) + "s";
       this.space_ship.update(dt);
       ref = this.asteroids;
       results = [];
       for (j = 0, len = ref.length; j < len; j++) {
         a = ref[j];
-        results.push(a.update(dt));
+        a.update(dt);
+        if (this.collision(this.space_ship, a)) {
+          results.push(this.active = false);
+        } else {
+          results.push(void 0);
+        }
       }
       return results;
     };
 
     GameState.prototype.create = function() {
       var i, x, y;
+      this.score = 0.0;
+      this.scoreText = game.add.text(10, 10, "", {
+        fontSize: '16px',
+        fill: '#000',
+        align: "center"
+      });
+      this.active = true;
       this.game.stage.backgroundColor = "448";
       this.space_ship = new SpaceShip;
       return this.asteroids = (function() {
@@ -164,7 +192,7 @@
           while (true) {
             x = randint(100, size_x - 100);
             y = randint(100, size_y - 100);
-            if (Math.abs(x - size_x / 2) + Math.abs(y - size_y / 2) > 300) {
+            if (Math.abs(x - size_x / 2) + Math.abs(y - size_y / 2) > 600) {
               break;
             }
           }

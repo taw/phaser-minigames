@@ -25,18 +25,20 @@ class SpaceShip
     @graphics.endFill()
 
   ensure_bounds: ->
-    if @graphics.x < 20 and @dx < 0
+    if @x < 20 and @dx < 0
       @dx = -@dx
-    if @graphics.x > size_x-20 and @dx > 0
+    if @x > size_x-20 and @dx > 0
       @dx = -@dx
-    if @graphics.y < 20 and @dy < 0
+    if @y < 20 and @dy < 0
       @dy = -@dy
-    if @graphics.y > size_y-20 and @dy > 0
+    if @y > size_y-20 and @dy > 0
       @dy = -@dy
 
   update: (dt) ->
-    @graphics.x += @dx * dt
-    @graphics.y += @dy * dt
+    @x += @dx * dt
+    @y += @dy * dt
+    @graphics.x = @x
+    @graphics.y = @y
     @graphics.angle = @angle
     @ensure_bounds()
 
@@ -68,7 +70,7 @@ class Asteroid
     @x  = x
     @y  = y
     angle = Math.random() * 2 * Math.PI
-    speed = Math.random() * 400.0
+    speed = randint(50, 200)
     @dx = Math.cos(angle) * speed
     @dy = Math.sin(angle) * speed
     @graphics = game.add.graphics(@x, @y)
@@ -76,25 +78,34 @@ class Asteroid
     @graphics.drawCircle(0, 0, 20)
 
   update: (dt) ->
-    @graphics.x += @dx * dt
-    @graphics.y += @dy * dt
+    @x += @dx * dt
+    @y += @dy * dt
+    @graphics.x = @x
+    @graphics.y = @y
     @ensure_bounds()
 
   ensure_bounds: ->
-    if @graphics.x < 20 and @dx < 0
+    if @x < 20 and @dx < 0
       @dx = -@dx
-    if @graphics.x > size_x-20 and @dx > 0
+    if @x > size_x-20 and @dx > 0
       @dx = -@dx
-    if @graphics.y < 20 and @dy < 0
+    if @y < 20 and @dy < 0
       @dy = -@dy
-    if @graphics.y > size_y-20 and @dy > 0
+    if @y > size_y-20 and @dy > 0
       @dy = -@dy
 
 class GameState
   constructor: ->
     null
 
+  collision: (a, b) ->
+    dx = a.x - b.x
+    dy = a.y - b.y
+    Math.sqrt((dx*dx) + (dy*dy)) < 25
+
   update: ->
+    return unless @active
+
     dt = @game.time.elapsed/1000.0
     if game.input.keyboard.isDown(Phaser.KeyCode.UP)
       @space_ship.speed_up(1.0, dt)
@@ -105,18 +116,26 @@ class GameState
     if game.input.keyboard.isDown(Phaser.KeyCode.RIGHT)
       @space_ship.turn(1.0, dt)
 
+    @score += dt
+    @scoreText.text = "You survived #{@score.toFixed(3)}s"
+
     @space_ship.update(dt)
     for a in @asteroids
       a.update(dt)
+      if @collision(@space_ship, a)
+        @active = false
 
   create: ->
+    @score = 0.0
+    @scoreText = game.add.text(10, 10, "", { fontSize: '16px', fill: '#000', align: "center" })
+    @active = true
     @game.stage.backgroundColor = "448"
     @space_ship = new SpaceShip
     @asteroids = for i in [0..9]
       while true
         x = randint(100, size_x-100)
         y = randint(100, size_y-100)
-        break if Math.abs(x-size_x/2) + Math.abs(y-size_y/2) > 300
+        break if Math.abs(x-size_x/2) + Math.abs(y-size_y/2) > 600
       new Asteroid(x, y)
 
 game = new Phaser.Game(size_x, size_y)
