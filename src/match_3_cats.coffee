@@ -71,10 +71,6 @@ class GameState
     @rotation.x = size_x/2 + 80*(cx-3)
     @rotation.y = size_y/2 + 80*(cy-3)
 
-    # while true
-    #   break if @board.matches.length == 0
-    #   @board.remove_matches()
-
   create: ->
     @game.stage.backgroundColor = "F88"
     @board = new Board()
