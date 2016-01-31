@@ -16,7 +16,7 @@
     };
 
     GameState.prototype.preload = function() {
-      return game.load.image('cat', '/images/cat-cupid-love-icon2.png');
+      return game.load.image('cat', '../images/cat-cupid-love-icon2.png');
     };
 
     GameState.prototype.create = function() {

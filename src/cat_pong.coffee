@@ -68,9 +68,9 @@ class GameState
     @ball_dy = 150
 
   preload: ->
-    @game.load.image("cat", "/images/cat_images/cat17.png")
-    @game.load.audio("meow", "/audio/cat_meow.mp3")
-    @game.load.audio("meow2", "/audio/cat_meow_2.mp3")
+    @game.load.image("cat", "../images/cat_images/cat17.png")
+    @game.load.audio("meow", "../audio/cat_meow.mp3")
+    @game.load.audio("meow2", "../audio/cat_meow_2.mp3")
 
   create: ->
     @game.stage.backgroundColor = "FFFF00"

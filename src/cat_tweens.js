@@ -19,7 +19,7 @@
       var i, j, results;
       results = [];
       for (i = j = 1; j <= 20; i = ++j) {
-        results.push(this.game.load.image("cat" + i, "/images/cat_images/cat" + i + ".png"));
+        results.push(this.game.load.image("cat" + i, "../images/cat_images/cat" + i + ".png"));
       }
       return results;
     };

@@ -7,7 +7,7 @@ class GameState
     null
 
   preload: ->
-    game.load.image('cat', '/images/cat-cupid-love-icon2.png')
+    game.load.image('cat', '../images/cat-cupid-love-icon2.png')
 
   create: ->
     game.stage.backgroundColor = "8FA"

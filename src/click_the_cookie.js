@@ -16,7 +16,7 @@
     function GameState() {}
 
     GameState.prototype.preload = function() {
-      return this.game.load.image('cookie', '/images/cookie.png');
+      return this.game.load.image('cookie', '../images/cookie.png');
     };
 
     GameState.prototype.update = function() {

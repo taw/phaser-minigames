@@ -8,7 +8,7 @@ size_y = window.innerHeight
 class GameState
   preload: ->
     for i in [1..20]
-      @game.load.image("cat#{i}", "/images/cat_images/cat#{i}.png")
+      @game.load.image("cat#{i}", "../images/cat_images/cat#{i}.png")
 
   update: ->
     null

@@ -223,7 +223,7 @@
     function GameState() {}
 
     GameState.prototype.preload = function() {
-      return this.game.load.audio("meow", "/audio/cat_meow.mp3");
+      return this.game.load.audio("meow", "../audio/cat_meow.mp3");
     };
 
     GameState.prototype.update = function() {

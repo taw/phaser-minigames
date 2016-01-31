@@ -195,13 +195,13 @@
     MenuState.prototype.preload = function() {
       var i, k;
       for (i = k = 1; k <= 20; i = ++k) {
-        this.game.load.image("cat" + i, "/images/cat_images/cat" + i + ".png");
+        this.game.load.image("cat" + i, "../images/cat_images/cat" + i + ".png");
       }
-      this.game.load.audio("meow", "/audio/cat_meow.mp3");
-      this.game.load.image("menu", "/images/buttons/menu.png");
-      this.game.load.image("button2x2", "/images/buttons/play2x2.png");
-      this.game.load.image("button4x4", "/images/buttons/play4x4.png");
-      return this.game.load.image("button6x6", "/images/buttons/play6x6.png");
+      this.game.load.audio("meow", "../audio/cat_meow.mp3");
+      this.game.load.image("menu", "../images/buttons/menu.png");
+      this.game.load.image("button2x2", "../images/buttons/play2x2.png");
+      this.game.load.image("button4x4", "../images/buttons/play4x4.png");
+      return this.game.load.image("button6x6", "../images/buttons/play6x6.png");
     };
 
     MenuState.prototype.create = function() {

@@ -127,7 +127,7 @@ class Board
 
 class GameState
   preload: ->
-    @game.load.audio("meow", "/audio/cat_meow.mp3")
+    @game.load.audio("meow", "../audio/cat_meow.mp3")
 
   update: ->
     @result.text = "Have fun playing"

@@ -7,7 +7,7 @@ randint = (a,b) ->
 
 class GameState
   preload: ->
-    @game.load.image('cookie', '/images/cookie.png')
+    @game.load.image('cookie', '../images/cookie.png')
 
   update: ->
     dt = @game.time.elapsed/1000.0

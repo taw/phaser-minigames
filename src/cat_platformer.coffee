@@ -4,8 +4,8 @@ size_y = window.innerHeight
 
 class GameState
   preload: ->
-    @game.load.image("cat", "/images/cat_images/cat17.png")
-    @game.load.image("platform", "/images/grass_platform.png")
+    @game.load.image("cat", "../images/cat_images/cat17.png")
+    @game.load.image("platform", "../images/grass_platform.png")
 
   update: ->
     game.physics.arcade.collide(@player, @platforms)

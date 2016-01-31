@@ -110,7 +110,7 @@
       results = [];
       for (j = k = 0, len = ref.length; k < len; j = ++k) {
         i = ref[j];
-        results.push(this.game.load.image("cat" + j, "/images/cat_images/cat" + i + ".png"));
+        results.push(this.game.load.image("cat" + j, "../images/cat_images/cat" + i + ".png"));
       }
       return results;
     };

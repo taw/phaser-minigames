@@ -85,7 +85,7 @@ class GameState
 
   preload: ->
     for i in [0..15]
-      @game.load.image("tile#{i}", "/images/sliding_puzzle/tile#{i}.jpg")
+      @game.load.image("tile#{i}", "../images/sliding_puzzle/tile#{i}.jpg")
 
   update: ->
     @scoreText.text = "Clicks: #{@score}"

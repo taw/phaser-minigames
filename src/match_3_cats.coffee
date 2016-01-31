@@ -55,7 +55,7 @@ class Board
 class GameState
   preload: ->
     for i,j in [3, 4, 11, 13, 17, 18, 20]
-      @game.load.image("cat#{j}", "/images/cat_images/cat#{i}.png")
+      @game.load.image("cat#{j}", "../images/cat_images/cat#{i}.png")
 
   rotation_position: ->
     mx = @game.input.activePointer.worldX

@@ -82,9 +82,9 @@
     };
 
     GameState.prototype.preload = function() {
-      this.game.load.image("cat", "/images/cat_images/cat17.png");
-      this.game.load.audio("meow", "/audio/cat_meow.mp3");
-      return this.game.load.audio("meow2", "/audio/cat_meow_2.mp3");
+      this.game.load.image("cat", "../images/cat_images/cat17.png");
+      this.game.load.audio("meow", "../audio/cat_meow.mp3");
+      return this.game.load.audio("meow2", "../audio/cat_meow_2.mp3");
     };
 
     GameState.prototype.create = function() {

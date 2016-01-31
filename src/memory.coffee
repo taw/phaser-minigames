@@ -96,8 +96,8 @@ class Board
 class GameState
   preload: ->
     for i in [1..18]
-      @game.load.image("cat#{i}", "/images/cat_images/cat#{i}.png")
-    @game.load.audio("meow", "/audio/cat_meow.mp3")
+      @game.load.image("cat#{i}", "../images/cat_images/cat#{i}.png")
+    @game.load.audio("meow", "../audio/cat_meow.mp3")
 
   update: ->
     @scoreText.text = "Clicks: #{@score}"

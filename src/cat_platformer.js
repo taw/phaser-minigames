@@ -12,8 +12,8 @@
     function GameState() {}
 
     GameState.prototype.preload = function() {
-      this.game.load.image("cat", "/images/cat_images/cat17.png");
-      return this.game.load.image("platform", "/images/grass_platform.png");
+      this.game.load.image("cat", "../images/cat_images/cat17.png");
+      return this.game.load.image("platform", "../images/grass_platform.png");
     };
 
     GameState.prototype.update = function() {
