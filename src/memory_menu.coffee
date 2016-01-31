@@ -110,6 +110,10 @@ class GameState
   create: ->
     @score = 0
     @scoreText = game.add.text(16, 16, '', { fontSize: '32px', fill: '#fff' })
+
+    @button_menu = game.add.button 16, 64, 'menu', =>
+      game.state.start("Menu")
+
     @game.stage.backgroundColor = "88F"
     @board = new Board(@x,@y)
     @game.input.onTap.add =>
@@ -123,6 +127,7 @@ class MenuState
     for i in [1..20]
       @game.load.image("cat#{i}", "/images/cat_images/cat#{i}.png")
     @game.load.audio("meow", "/audio/cat_meow.mp3")
+    @game.load.image("menu", "/images/buttons/menu.png")
     @game.load.image("button2x2", "/images/buttons/play2x2.png")
     @game.load.image("button4x4", "/images/buttons/play4x4.png")
     @game.load.image("button6x6", "/images/buttons/play6x6.png")

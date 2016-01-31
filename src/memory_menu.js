@@ -171,6 +171,11 @@
         fontSize: '32px',
         fill: '#fff'
       });
+      this.button_menu = game.add.button(16, 64, 'menu', (function(_this) {
+        return function() {
+          return game.state.start("Menu");
+        };
+      })(this));
       this.game.stage.backgroundColor = "88F";
       this.board = new Board(this.x, this.y);
       return this.game.input.onTap.add((function(_this) {
@@ -193,6 +198,7 @@
         this.game.load.image("cat" + i, "/images/cat_images/cat" + i + ".png");
       }
       this.game.load.audio("meow", "/audio/cat_meow.mp3");
+      this.game.load.image("menu", "/images/buttons/menu.png");
       this.game.load.image("button2x2", "/images/buttons/play2x2.png");
       this.game.load.image("button4x4", "/images/buttons/play4x4.png");
       return this.game.load.image("button6x6", "/images/buttons/play6x6.png");
