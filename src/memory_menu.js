@@ -58,11 +58,12 @@
   })();
 
   Board = (function() {
-    function Board() {
-      var tiles, x, y;
-      this.size_x = 6;
-      this.size_y = 6;
-      tiles = shuffle(slice.call([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18]).concat(slice.call([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18])));
+    function Board(size_x1, size_y1) {
+      var cats, tiles, x, y;
+      this.size_x = size_x1;
+      this.size_y = size_y1;
+      cats = shuffle([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20]).slice(0, this.size_x * this.size_y / 2);
+      tiles = shuffle(slice.call(cats).concat(slice.call(cats)));
       this.content = (function() {
         var k, ref, results;
         results = [];
@@ -92,8 +93,8 @@
             var l, ref1, results1;
             results1 = [];
             for (y = l = 0, ref1 = this.size_y; 0 <= ref1 ? l < ref1 : l > ref1; y = 0 <= ref1 ? ++l : --l) {
-              loc_x = (size_x / 2 - 96 * 2.5) + 96 * x;
-              loc_y = (size_y / 2 - 96 * 2.5) + 96 * y;
+              loc_x = size_x / 2 + 96 * (x - this.size_x / 2 + 0.5);
+              loc_y = size_y / 2 + 96 * (y - this.size_y / 2 + 0.5);
               results1.push(new Tile(loc_x, loc_y, this.content[x][y]));
             }
             return results1;
@@ -145,15 +146,18 @@
   })();
 
   GameState = (function() {
-    function GameState() {}
+    function GameState(x, y) {
+      this.x = x;
+      this.y = y;
+    }
 
     GameState.prototype.update = function() {
       return this.scoreText.text = "Clicks: " + this.score;
     };
 
     GameState.prototype.click = function(x, y) {
-      x = Math.round((x - size_x / 2 + 96 * 2.5) / 96);
-      y = Math.round((y - size_y / 2 + 96 * 2.5) / 96);
+      x = Math.round((x - size_x / 2 + 96 * (this.board.size_x / 2 - 0.5)) / 96);
+      y = Math.round((y - size_y / 2 + 96 * (this.board.size_y / 2 - 0.5)) / 96);
       if (x >= 0 && x <= this.board.size_x - 1 && y >= 0 && y <= this.board.size_y - 1) {
         if (this.board.click_cell(x, y)) {
           return this.score += 1;
@@ -168,7 +172,7 @@
         fill: '#fff'
       });
       this.game.stage.backgroundColor = "88F";
-      this.board = new Board;
+      this.board = new Board(this.x, this.y);
       return this.game.input.onTap.add((function(_this) {
         return function() {
           return _this.click(_this.game.input.activePointer.worldX, _this.game.input.activePointer.worldY);
@@ -185,25 +189,32 @@
 
     MenuState.prototype.preload = function() {
       var i, k;
-      for (i = k = 1; k <= 18; i = ++k) {
+      for (i = k = 1; k <= 20; i = ++k) {
         this.game.load.image("cat" + i, "/images/cat_images/cat" + i + ".png");
       }
       this.game.load.audio("meow", "/audio/cat_meow.mp3");
+      this.game.load.image("button2x2", "/images/buttons/play2x2.png");
       this.game.load.image("button4x4", "/images/buttons/play4x4.png");
       return this.game.load.image("button6x6", "/images/buttons/play6x6.png");
     };
 
     MenuState.prototype.create = function() {
       this.game.stage.backgroundColor = "F8F";
-      this.button44 = game.add.button(size_x * 0.5, size_y * 0.33, 'button4x4', (function(_this) {
+      this.button22 = game.add.button(size_x * 0.5, size_y * 0.33, 'button2x2', (function(_this) {
         return function() {
-          return game.state.start("Game");
+          return game.state.start("Game2x2");
+        };
+      })(this));
+      this.button22.anchor.set(0.5, 0.5);
+      this.button44 = game.add.button(size_x * 0.5, size_y * 0.50, 'button4x4', (function(_this) {
+        return function() {
+          return game.state.start("Game4x4");
         };
       })(this));
       this.button44.anchor.set(0.5, 0.5);
       this.button66 = game.add.button(size_x * 0.5, size_y * 0.67, 'button6x6', (function(_this) {
         return function() {
-          return game.state.start("Game");
+          return game.state.start("Game6x6");
         };
       })(this));
       return this.button66.anchor.set(0.5, 0.5);
@@ -217,6 +228,10 @@
 
   game.state.add("Menu", MenuState, true);
 
-  game.state.add("Game", GameState);
+  game.state.add("Game2x2", new GameState(2, 2));
+
+  game.state.add("Game4x4", new GameState(4, 4));
+
+  game.state.add("Game6x6", new GameState(6, 6));
 
 }).call(this);
