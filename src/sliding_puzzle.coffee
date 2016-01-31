@@ -63,6 +63,17 @@ class Board
         return true
     false
 
+  keyboard_move_cell: (dx,dy) ->
+    for x in [0...@size_x]
+      for y in [0...@size_y]
+        if @grid[x][y].c == 15
+          empty_x = x
+          empty_y = y
+    x = empty_x-dx
+    y = empty_y-dy
+    return false if x < 0 or y < 0 or x >= @size_x or y >= @size_y
+    return @click_cell(x,y)
+
   check_if_completed: (x,y) ->
     console.log(JSON.stringify(((cell.c for cell in row) for row in @grid)))
     if JSON.stringify(((cell.c for cell in row) for row in @grid)) == JSON.stringify([[0,4,8,12],[1,5,9,13],[2,6,10,14],[3,7,11,15]])
@@ -100,6 +111,18 @@ class GameState
         @game.input.activePointer.worldY,
       )
 
+    left_key  = game.input.keyboard.addKey(Phaser.KeyCode.LEFT)
+    left_key.onDown.add =>
+      @score +=1 if @board.keyboard_move_cell(-1,0)
+    right_key = game.input.keyboard.addKey(Phaser.KeyCode.RIGHT)
+    right_key.onDown.add =>
+      @score +=1 if @board.keyboard_move_cell(1,0)
+    up_key    = game.input.keyboard.addKey(Phaser.KeyCode.UP)
+    up_key.onDown.add =>
+      @score +=1 if @board.keyboard_move_cell(0,-1)
+    down_key  = game.input.keyboard.addKey(Phaser.KeyCode.DOWN)
+    down_key.onDown.add =>
+      @score +=1 if @board.keyboard_move_cell(0,1)
 
 game = new Phaser.Game(size_x, size_y)
 game.state.add("Game", GameState, true)

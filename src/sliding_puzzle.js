@@ -109,6 +109,24 @@ Board = (function() {
     return false;
   };
 
+  Board.prototype.keyboard_move_cell = function(dx, dy) {
+    var empty_x, empty_y, k, l, ref, ref1, x, y;
+    for (x = k = 0, ref = this.size_x; 0 <= ref ? k < ref : k > ref; x = 0 <= ref ? ++k : --k) {
+      for (y = l = 0, ref1 = this.size_y; 0 <= ref1 ? l < ref1 : l > ref1; y = 0 <= ref1 ? ++l : --l) {
+        if (this.grid[x][y].c === 15) {
+          empty_x = x;
+          empty_y = y;
+        }
+      }
+    }
+    x = empty_x - dx;
+    y = empty_y - dy;
+    if (x < 0 || y < 0 || x >= this.size_x || y >= this.size_y) {
+      return false;
+    }
+    return this.click_cell(x, y);
+  };
+
   Board.prototype.check_if_completed = function(x, y) {
     var cell, row;
     console.log(JSON.stringify((function() {
@@ -190,6 +208,7 @@ GameState = (function() {
   };
 
   GameState.prototype.create = function() {
+    var down_key, left_key, right_key, up_key;
     this.score = 0;
     this.scoreText = game.add.text(16, 16, '', {
       fontSize: '32px',
@@ -201,9 +220,41 @@ GameState = (function() {
     });
     this.game.stage.backgroundColor = "F88";
     this.board = new Board;
-    return this.game.input.onTap.add((function(_this) {
+    this.game.input.onTap.add((function(_this) {
       return function() {
         return _this.click(_this.game.input.activePointer.worldX, _this.game.input.activePointer.worldY);
+      };
+    })(this));
+    left_key = game.input.keyboard.addKey(Phaser.KeyCode.LEFT);
+    left_key.onDown.add((function(_this) {
+      return function() {
+        if (_this.board.keyboard_move_cell(-1, 0)) {
+          return _this.score += 1;
+        }
+      };
+    })(this));
+    right_key = game.input.keyboard.addKey(Phaser.KeyCode.RIGHT);
+    right_key.onDown.add((function(_this) {
+      return function() {
+        if (_this.board.keyboard_move_cell(1, 0)) {
+          return _this.score += 1;
+        }
+      };
+    })(this));
+    up_key = game.input.keyboard.addKey(Phaser.KeyCode.UP);
+    up_key.onDown.add((function(_this) {
+      return function() {
+        if (_this.board.keyboard_move_cell(0, -1)) {
+          return _this.score += 1;
+        }
+      };
+    })(this));
+    down_key = game.input.keyboard.addKey(Phaser.KeyCode.DOWN);
+    return down_key.onDown.add((function(_this) {
+      return function() {
+        if (_this.board.keyboard_move_cell(0, 1)) {
+          return _this.score += 1;
+        }
       };
     })(this));
   };
