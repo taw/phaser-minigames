@@ -222,6 +222,10 @@
   GameState = (function() {
     function GameState() {}
 
+    GameState.prototype.preload = function() {
+      return this.game.load.audio("meow", "/audio/cat_meow.mp3");
+    };
+
     GameState.prototype.update = function() {
       return this.result.text = "Have fun playing";
     };
@@ -230,7 +234,10 @@
       x = Math.floor((x - size_x / 2 + 200) / 40);
       y = Math.floor((y - size_y / 2 + 200) / 40);
       if (x >= 0 && x <= this.board.size_x - 1 && y >= 0 && y <= this.board.size_y - 1) {
-        return this.board.click_cell(x, y);
+        this.board.click_cell(x, y);
+        if (this.board.grid[x][y].c === "X") {
+          return game.add.audio("meow").play();
+        }
       }
     };
 

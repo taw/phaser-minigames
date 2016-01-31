@@ -126,6 +126,9 @@ class Board
         @content[x][y] = @mines_near_xy(x, y)
 
 class GameState
+  preload: ->
+    @game.load.audio("meow", "/audio/cat_meow.mp3")
+
   update: ->
     @result.text = "Have fun playing"
 
@@ -134,6 +137,8 @@ class GameState
     y = Math.floor((y - size_y / 2 + 200) / 40)
     if x >= 0 and x <= @board.size_x-1 and y >= 0 and y <= @board.size_y-1
       @board.click_cell(x,y)
+      if @board.grid[x][y].c == "X"
+        game.add.audio("meow").play()
 
   create: ->
     @result = game.add.text(16, 16, '', { fontSize: '32px', fill: '#fff' })
