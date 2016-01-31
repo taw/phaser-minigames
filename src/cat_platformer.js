@@ -59,7 +59,10 @@
       this.add_platform(200, size_y - 500);
       this.add_platform(500, size_y - 200);
       this.add_platform(500, size_y - 400);
-      return this.add_platform(500, size_y - 600);
+      this.add_platform(500, size_y - 600);
+      this.add_platform(800, size_y - 100);
+      this.add_platform(800, size_y - 300);
+      return this.add_platform(800, size_y - 500);
     };
 
     return GameState;

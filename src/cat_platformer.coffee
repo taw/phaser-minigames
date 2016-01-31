@@ -48,6 +48,9 @@ class GameState
     @add_platform 500, size_y-200
     @add_platform 500, size_y-400
     @add_platform 500, size_y-600
+    @add_platform 800, size_y-100
+    @add_platform 800, size_y-300
+    @add_platform 800, size_y-500
 
 
 game = new Phaser.Game(size_x, size_y)
