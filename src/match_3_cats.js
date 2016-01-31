@@ -29,6 +29,7 @@
               loc_y = size_y / 2 + 80 * (y - 3.5);
               c = randint(0, 6);
               tile = game.add.sprite(loc_x, loc_y, "cat" + c);
+              tile.c = c;
               tile.anchor.setTo(0.5, 0.5);
               tile.height = 64;
               tile.width = 64;
@@ -40,6 +41,23 @@
         return results;
       }).call(this);
     }
+
+    Board.prototype.set_tile = function(x, y, c) {
+      this.grid[x][y].c = c;
+      return this.grid[x][y].loadTexture("cat" + c);
+    };
+
+    Board.prototype.rotate = function(x, y) {
+      var c0, c1, c2, c3;
+      c0 = this.grid[x][y].c;
+      c1 = this.grid[x + 1][y].c;
+      c2 = this.grid[x + 1][y + 1].c;
+      c3 = this.grid[x][y + 1].c;
+      this.set_tile(x, y, c3);
+      this.set_tile(x + 1, y, c0);
+      this.set_tile(x + 1, y + 1, c1);
+      return this.set_tile(x, y + 1, c2);
+    };
 
     return Board;
 
@@ -82,7 +100,14 @@
       this.board = new Board();
       this.rotation = game.add.graphics(0, 0);
       this.rotation.lineStyle(5, 0xFF0000);
-      return this.rotation.drawCircle(0, 0, 160);
+      this.rotation.drawCircle(0, 0, 160);
+      return this.game.input.onTap.add((function(_this) {
+        return function() {
+          var cx, cy, ref;
+          ref = _this.rotation_position(), cx = ref[0], cy = ref[1];
+          return _this.board.rotate(cx, cy);
+        };
+      })(this));
     };
 
     return GameState;

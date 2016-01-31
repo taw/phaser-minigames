@@ -15,10 +15,25 @@ class Board
         loc_y = size_y/2 + 80*(y-3.5)
         c = randint(0, 6)
         tile = game.add.sprite(loc_x, loc_y, "cat#{c}")
+        tile.c = c
         tile.anchor.setTo(0.5, 0.5)
         tile.height = 64
         tile.width = 64
         tile
+
+  set_tile: (x,y,c) ->
+    @grid[x][y].c = c
+    @grid[x][y].loadTexture("cat#{c}")
+
+  rotate: (x, y) ->
+    c0 = @grid[x][y].c
+    c1 = @grid[x+1][y].c
+    c2 = @grid[x+1][y+1].c
+    c3 = @grid[x][y+1].c
+    @set_tile(x,  y,  c3)
+    @set_tile(x+1,y,  c0)
+    @set_tile(x+1,y+1,c1)
+    @set_tile(x,  y+1,c2)
 
 class GameState
   preload: ->
@@ -38,8 +53,6 @@ class GameState
     [cx, cy] = @rotation_position()
     @rotation.x = size_x/2 + 80*(cx-3)
     @rotation.y = size_y/2 + 80*(cy-3)
-    # c = randint(0, 6)
-    # @board.grid[0][0].loadTexture("cat#{c}")
 
   create: ->
     @game.stage.backgroundColor = "F88"
@@ -49,6 +62,9 @@ class GameState
     @rotation.lineStyle(5, 0xFF0000)
     @rotation.drawCircle(0, 0, 160)
 
+    @game.input.onTap.add =>
+      [cx, cy] = @rotation_position()
+      @board.rotate(cx, cy)
 
 game = new Phaser.Game(size_x, size_y)
 game.state.add("Game", GameState, true)
