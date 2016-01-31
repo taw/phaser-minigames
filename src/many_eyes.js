@@ -13,9 +13,12 @@
   };
 
   Eye = (function() {
-    function Eye() {
-      this.x = randint(200, size_x - 200);
-      this.y = randint(200, size_y - 200);
+    function Eye(i) {
+      var cx, cy;
+      cx = (i % 4) * size_x / 4;
+      cy = ~~(i / 4) * size_y / 4;
+      this.x = randint(cx + 50, cx + size_x / 4 - 50);
+      this.y = randint(cy + 50, cy + size_y / 4 - 50);
       this.eyesize = randint(50, 200);
       this.max_eye_movement = this.eyesize * 0.2;
       this.eye = game.add.graphics(this.x, this.y);
@@ -67,8 +70,8 @@
       return this.eyes = (function() {
         var j, results;
         results = [];
-        for (i = j = 0; j <= 9; i = ++j) {
-          results.push(new Eye);
+        for (i = j = 0; j < 16; i = ++j) {
+          results.push(new Eye(i));
         }
         return results;
       })();

@@ -6,9 +6,12 @@ randint = (a,b) ->
   a + Math.floor(Math.random() * (b-a+1))
 
 class Eye
-  constructor: ->
-    @x = randint(200, size_x-200)
-    @y = randint(200, size_y-200)
+  constructor: (i) ->
+    cx = (i % 4) * size_x / 4
+    cy = ~~(i / 4) * size_y / 4
+
+    @x = randint(cx + 50, cx + size_x / 4 - 50)
+    @y = randint(cy + 50, cy + size_y / 4 - 50)
     @eyesize = randint(50,200)
     @max_eye_movement = @eyesize * 0.2
     @eye = game.add.graphics(@x, @y)
@@ -42,7 +45,7 @@ class GameState
 
   create: ->
     @game.stage.backgroundColor = "F88"
-    @eyes = (new Eye for i in [0..9])
+    @eyes = (new Eye(i) for i in [0...16])
 
 game = new Phaser.Game(size_x, size_y)
 game.state.add("Game", GameState, true)

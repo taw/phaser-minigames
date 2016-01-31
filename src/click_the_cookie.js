@@ -42,25 +42,16 @@
       });
       this.game.stage.backgroundColor = "F8F";
       this.cookie = this.game.add.sprite(randint(0, size_x - 120), randint(0, size_y - 120), 'cookie');
+      this.cookie.inputEnabled = true;
+      this.cookie.events.onInputDown.add((function(_this) {
+        return function() {
+          return _this.score += 1;
+        };
+      })(this));
       angle = Math.random() * 2 * Math.PI;
       speed = 200.0;
       this.dx = Math.cos(angle) * speed;
-      this.dy = Math.sin(angle) * speed;
-      return this.game.input.onTap.add((function(_this) {
-        return function() {
-          return _this.click(_this.game.input.activePointer.worldX, _this.game.input.activePointer.worldY);
-        };
-      })(this));
-    };
-
-    GameState.prototype.click = function(x, y) {
-      if (x < this.cookie.x || x >= this.cookie.x + 120) {
-        return;
-      }
-      if (y < this.cookie.y || y >= this.cookie.y + 120) {
-        return;
-      }
-      return this.score += 1;
+      return this.dy = Math.sin(angle) * speed;
     };
 
     return GameState;
