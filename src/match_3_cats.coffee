@@ -35,6 +35,23 @@ class Board
     @set_tile(x+1,y+1,c1)
     @set_tile(x,  y+1,c2)
 
+  find_matches: ->
+    @matches = []
+    for x in [0...@size_x]
+      for y in [0...@size_y]
+        for xx in [x+1...@size_x]
+          break if @grid[xx][y].c != @grid[x][y].c
+        if xx - x >= 3
+          @matches.push("#{x},#{y} - #{xx-1},#{y}")
+        for yy in [y+1...@size_y]
+          break if @grid[x][yy].c != @grid[x][y].c
+        if yy - y >= 3
+          @matches.push("#{x},#{y} - #{x},#{yy-1}")
+
+
+  remove_matches: ->
+    false
+
 class GameState
   preload: ->
     for i,j in [3, 4, 11, 13, 17, 18, 20]
@@ -54,6 +71,10 @@ class GameState
     @rotation.x = size_x/2 + 80*(cx-3)
     @rotation.y = size_y/2 + 80*(cy-3)
 
+    # while true
+    #   break if @board.matches.length == 0
+    #   @board.remove_matches()
+
   create: ->
     @game.stage.backgroundColor = "F88"
     @board = new Board()
@@ -65,6 +86,8 @@ class GameState
     @game.input.onTap.add =>
       [cx, cy] = @rotation_position()
       @board.rotate(cx, cy)
+      @board.find_matches()
+      console.log(@board.matches)
 
 game = new Phaser.Game(size_x, size_y)
 game.state.add("Game", GameState, true)

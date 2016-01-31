@@ -59,6 +59,44 @@
       return this.set_tile(x, y + 1, c2);
     };
 
+    Board.prototype.find_matches = function() {
+      var k, ref, results, x, xx, y, yy;
+      this.matches = [];
+      results = [];
+      for (x = k = 0, ref = this.size_x; 0 <= ref ? k < ref : k > ref; x = 0 <= ref ? ++k : --k) {
+        results.push((function() {
+          var l, m, n, ref1, ref2, ref3, ref4, ref5, results1;
+          results1 = [];
+          for (y = l = 0, ref1 = this.size_y; 0 <= ref1 ? l < ref1 : l > ref1; y = 0 <= ref1 ? ++l : --l) {
+            for (xx = m = ref2 = x + 1, ref3 = this.size_x; ref2 <= ref3 ? m < ref3 : m > ref3; xx = ref2 <= ref3 ? ++m : --m) {
+              if (this.grid[xx][y].c !== this.grid[x][y].c) {
+                break;
+              }
+            }
+            if (xx - x >= 3) {
+              this.matches.push(x + "," + y + " - " + (xx - 1) + "," + y);
+            }
+            for (yy = n = ref4 = y + 1, ref5 = this.size_y; ref4 <= ref5 ? n < ref5 : n > ref5; yy = ref4 <= ref5 ? ++n : --n) {
+              if (this.grid[x][yy].c !== this.grid[x][y].c) {
+                break;
+              }
+            }
+            if (yy - y >= 3) {
+              results1.push(this.matches.push(x + "," + y + " - " + x + "," + (yy - 1)));
+            } else {
+              results1.push(void 0);
+            }
+          }
+          return results1;
+        }).call(this));
+      }
+      return results;
+    };
+
+    Board.prototype.remove_matches = function() {
+      return false;
+    };
+
     return Board;
 
   })();
@@ -105,7 +143,9 @@
         return function() {
           var cx, cy, ref;
           ref = _this.rotation_position(), cx = ref[0], cy = ref[1];
-          return _this.board.rotate(cx, cy);
+          _this.board.rotate(cx, cy);
+          _this.board.find_matches();
+          return console.log(_this.board.matches);
         };
       })(this));
     };
