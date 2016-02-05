@@ -2,17 +2,14 @@ Phaser = window.Phaser
 size_x = window.innerWidth
 size_y = window.innerHeight
 
-randint = (a,b) ->
-  a + Math.floor(Math.random() * (b-a+1))
-
 class Eye
   constructor: (i) ->
     cx = (i % 4) * size_x / 4
     cy = ~~(i / 4) * size_y / 4
 
-    @x = randint(cx + 50, cx + size_x / 4 - 50)
-    @y = randint(cy + 50, cy + size_y / 4 - 50)
-    @eyesize = randint(50,200)
+    @x = game.rnd.between(cx + 50, cx + size_x / 4 - 50)
+    @y = game.rnd.between(cy + 50, cy + size_y / 4 - 50)
+    @eyesize = game.rnd.between(50,200)
     @max_eye_movement = @eyesize * 0.2
     @eye = game.add.graphics(@x, @y)
     @eye.beginFill(0xFFFFFF)

@@ -2,9 +2,6 @@ Phaser = window.Phaser
 size_x = window.innerWidth
 size_y = window.innerHeight
 
-randint = (a,b) ->
-  a + Math.floor(Math.random() * (b-a+1))
-
 class Cell
   constructor: (x,y,c) ->
     @x = x
@@ -104,8 +101,8 @@ class Board
   setup_mines: ->
     mines_left = @mines
     while mines_left > 0
-      x = randint(0, @size_x-1)
-      y = randint(0, @size_y-1)
+      x = game.rnd.between(0, @size_x-1)
+      y = game.rnd.between(0, @size_y-1)
       if @content[x][y] == null
         @content[x][y] = "X"
         mines_left -= 1

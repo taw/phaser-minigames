@@ -2,9 +2,6 @@ Phaser = window.Phaser
 size_x = window.innerWidth
 size_y = window.innerHeight
 
-randint = (a,b) ->
-  a + Math.floor(Math.random() * (b-a+1))
-
 class GameState
   constructor: ->
     null
@@ -86,8 +83,8 @@ class GameState
   ai_movement: ->
     return if @winner != null
     while true
-      x = randint(0,2)
-      y = randint(0,2)
+      x = game.rnd.between(0,2)
+      y = game.rnd.between(0,2)
       if @content[y][x] == "?"
         @content[y][x] = "O"
         break

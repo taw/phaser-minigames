@@ -2,9 +2,6 @@ Phaser = window.Phaser
 size_x = window.innerWidth
 size_y = window.innerHeight
 
-randint = (a,b) ->
-  a + Math.floor(Math.random() * (b-a+1))
-
 class GameState
   preload: ->
     @game.load.image('cookie', '../images/cookie.png')
@@ -23,7 +20,11 @@ class GameState
     @score = 0
     @scoreText = game.add.text(16, 16, '', { fontSize: '32px', fill: '#fff' })
     @game.stage.backgroundColor = "F8F"
-    @cookie = @game.add.sprite(randint(0, size_x-120), randint(0, size_y-120), 'cookie')
+    @cookie = @game.add.sprite(
+      game.rnd.between(0, size_x-120)
+      game.rnd.between(0, size_y-120)
+      'cookie'
+    )
     @cookie.inputEnabled = true
     @cookie.events.onInputDown.add =>
       @score += 1

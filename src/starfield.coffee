@@ -2,15 +2,12 @@ Phaser = window.Phaser
 size_x = window.innerWidth
 size_y = window.innerHeight
 
-randint = (a,b) ->
-  a + Math.floor(Math.random() * (b-a+1))
-
 class GameState
   reset_star_position: (star_sprite) ->
     angle = Math.random() * 2 * Math.PI
-    speed = randint(50, 400)
-    star_sprite.x = size_x/2 + randint(-50, 50)
-    star_sprite.y = size_y/2 + randint(-50, 50)
+    speed = game.rnd.between(50, 400)
+    star_sprite.x = size_x/2 + game.rnd.between(-50, 50)
+    star_sprite.y = size_y/2 + game.rnd.between(-50, 50)
 
   new_star: ->
     star = game.add.graphics(0, 0)

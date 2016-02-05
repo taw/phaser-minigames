@@ -2,9 +2,6 @@ Phaser = window.Phaser
 size_x = window.innerWidth
 size_y = window.innerHeight
 
-randint = (a,b) ->
-  a + Math.floor(Math.random() * (b-a+1))
-
 class SpaceShip
   constructor: ->
     @x = size_x / 2
@@ -70,7 +67,7 @@ class Asteroid
     @x  = x
     @y  = y
     angle = Math.random() * 2 * Math.PI
-    speed = randint(50, 200)
+    speed = game.rnd.between(50, 200)
     @dx = Math.cos(angle) * speed
     @dy = Math.sin(angle) * speed
     @graphics = game.add.graphics(@x, @y)
@@ -130,8 +127,8 @@ class GameState
     @space_ship = new SpaceShip
     @asteroids = for i in [0..9]
       while true
-        x = randint(100, size_x-100)
-        y = randint(100, size_y-100)
+        x = game.rnd.between(100, size_x-100)
+        y = game.rnd.between(100, size_y-100)
         break if Math.abs(x-size_x/2) + Math.abs(y-size_y/2) > 600
       new Asteroid(x, y)
 

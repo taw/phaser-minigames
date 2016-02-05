@@ -2,9 +2,6 @@ Phaser = window.Phaser
 size_x = window.innerWidth
 size_y = window.innerHeight
 
-randint = (a,b) ->
-  a + Math.floor(Math.random() * (b-a+1))
-
 class Board
   constructor: ->
     @size_x = 8
@@ -13,7 +10,7 @@ class Board
       for y in [0...@size_y]
         loc_x = size_x/2 + 80*(x-3.5)
         loc_y = size_y/2 + 80*(y-3.5)
-        c = randint(0, 6)
+        c = game.rnd.between(0, 6)
         tile = game.add.sprite(loc_x, loc_y, "cat#{c}")
         tile.c = c
         tile.anchor.setTo(0.5, 0.5)

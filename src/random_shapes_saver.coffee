@@ -2,9 +2,6 @@ Phaser = window.Phaser
 size_x = window.innerWidth
 size_y = window.innerHeight
 
-randint = (a,b) ->
-  a + Math.floor(Math.random() * (b-a+1))
-
 random_color = ->
   Math.random() * 0xFFFFFF
 
@@ -32,22 +29,22 @@ class GameState
 class Shape
   constructor: ->
     @active = true
-    @x = randint(0, size_x)
-    @y = randint(0, size_y)
+    @x = game.rnd.between(0, size_x)
+    @y = game.rnd.between(0, size_y)
     @graphics = game.add.graphics(@x, @y)
     @graphics.lineStyle(0)
     @graphics.beginFill(random_color())
-    switch randint(0, 1)
+    switch game.rnd.between(0, 1)
       when 0
-        @graphics.drawCircle(0, 0, randint(5, 100))
+        @graphics.drawCircle(0, 0, game.rnd.between(5, 100))
       when 1
         @graphics.drawPolygon([
           0,
           0,
-          randint(-50, 50),
-          randint(-50, 50),
-          randint(-50, 50),
-          randint(-50, 50),
+          game.rnd.between(-50, 50),
+          game.rnd.between(-50, 50),
+          game.rnd.between(-50, 50),
+          game.rnd.between(-50, 50),
         ])
 
 
