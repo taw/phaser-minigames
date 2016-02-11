@@ -34,18 +34,14 @@ class GameState
   ensure_bounds: ->
     if @ball.x < 65 and @ball_dx < 0
       if @hit_left_paddle()
-        @ball_dx *= -1.1
-        @ball_dy *= 1.1
-        @meow.play()
+        @bounce_left_paddle()
       else
         @right_score_val += 1
         @reset_ball()
         @meow2.play()
     if @ball.x > size_x-65 and @ball_dx > 0
       if @hit_right_paddle()
-        @ball_dx *= -1.1
-        @ball_dy *= 1.1
-        @meow.play()
+        @bounce_right_paddle()
       else
         @left_score_val += 1
         @reset_ball()
@@ -55,19 +51,38 @@ class GameState
     if @ball.y > size_y-25 and @ball_dy > 0
       @ball_dy = -@ball_dy
 
+  bounce_left_paddle: ->
+    intercept = (@left_paddle.y - @ball.y) / (65 + 25)
+    speed = 1.1 * Math.sqrt(@ball_dx*@ball_dx + @ball_dy*@ball_dy)
+    @launch_ball(speed, 0 + 45*intercept)
+    @meow.play()
+
+  bounce_right_paddle: ->
+    intercept = (@right_paddle.y - @ball.y) / (65 + 25)
+    speed = 1.1 * Math.sqrt(@ball_dx*@ball_dx + @ball_dy*@ball_dy)
+    @launch_ball(speed, 180 + 45*intercept)
+    @meow.play()
+
   hit_left_paddle: ->
     Math.abs(@left_paddle.y - @ball.y) < 65 + 25
 
   hit_right_paddle: ->
     Math.abs(@right_paddle.y - @ball.y) < 65 + 25
 
+  launch_ball: (speed, angle) ->
+    @ball_dx = Math.cos(angle / 360.0 * Math.PI * 2) * speed
+    @ball_dy = Math.sin(angle / 360.0 * Math.PI * 2) * speed
+
   reset_ball: ->
-    @ball.x  = size_x / 2
-    @ball.y  = size_y / 2
-    angle = Math.random() * 2 * Math.PI
-    speed = 250.0
-    @ball_dx = Math.cos(angle) * speed
-    @ball_dy = Math.sin(angle) * speed
+    @ball.x = size_x / 2
+    @ball.y = size_y / 2
+    if game.rnd.between(0,1) == 0
+      # Right
+      angle = game.rnd.between(-45, 45)
+    else
+      # Left
+      angle = game.rnd.between(180-45, 180+45)
+    @launch_ball(300.0, angle)
 
   preload: ->
     @game.load.image("cat", "../images/cat_images/cat17.png")

@@ -38,9 +38,7 @@
     GameState.prototype.ensure_bounds = function() {
       if (this.ball.x < 65 && this.ball_dx < 0) {
         if (this.hit_left_paddle()) {
-          this.ball_dx *= -1.1;
-          this.ball_dy *= 1.1;
-          this.meow.play();
+          this.bounce_left_paddle();
         } else {
           this.right_score_val += 1;
           this.reset_ball();
@@ -49,9 +47,7 @@
       }
       if (this.ball.x > size_x - 65 && this.ball_dx > 0) {
         if (this.hit_right_paddle()) {
-          this.ball_dx *= -1.1;
-          this.ball_dy *= 1.1;
-          this.meow.play();
+          this.bounce_right_paddle();
         } else {
           this.left_score_val += 1;
           this.reset_ball();
@@ -66,6 +62,22 @@
       }
     };
 
+    GameState.prototype.bounce_left_paddle = function() {
+      var intercept, speed;
+      intercept = (this.left_paddle.y - this.ball.y) / (65 + 25);
+      speed = 1.1 * Math.sqrt(this.ball_dx * this.ball_dx + this.ball_dy * this.ball_dy);
+      this.launch_ball(speed, 0 + 45 * intercept);
+      return this.meow.play();
+    };
+
+    GameState.prototype.bounce_right_paddle = function() {
+      var intercept, speed;
+      intercept = (this.right_paddle.y - this.ball.y) / (65 + 25);
+      speed = 1.1 * Math.sqrt(this.ball_dx * this.ball_dx + this.ball_dy * this.ball_dy);
+      this.launch_ball(speed, 180 + 45 * intercept);
+      return this.meow.play();
+    };
+
     GameState.prototype.hit_left_paddle = function() {
       return Math.abs(this.left_paddle.y - this.ball.y) < 65 + 25;
     };
@@ -74,14 +86,21 @@
       return Math.abs(this.right_paddle.y - this.ball.y) < 65 + 25;
     };
 
+    GameState.prototype.launch_ball = function(speed, angle) {
+      this.ball_dx = Math.cos(angle / 360.0 * Math.PI * 2) * speed;
+      return this.ball_dy = Math.sin(angle / 360.0 * Math.PI * 2) * speed;
+    };
+
     GameState.prototype.reset_ball = function() {
-      var angle, speed;
+      var angle;
       this.ball.x = size_x / 2;
       this.ball.y = size_y / 2;
-      angle = Math.random() * 2 * Math.PI;
-      speed = 250.0;
-      this.ball_dx = Math.cos(angle) * speed;
-      return this.ball_dy = Math.sin(angle) * speed;
+      if (game.rnd.between(0, 1) === 0) {
+        angle = game.rnd.between(-45, 45);
+      } else {
+        angle = game.rnd.between(180 - 45, 180 + 45);
+      }
+      return this.launch_ball(300.0, angle);
     };
 
     GameState.prototype.preload = function() {
