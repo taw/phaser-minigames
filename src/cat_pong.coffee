@@ -64,8 +64,10 @@ class GameState
   reset_ball: ->
     @ball.x  = size_x / 2
     @ball.y  = size_y / 2
-    @ball_dx = 150
-    @ball_dy = 150
+    angle = Math.random() * 2 * Math.PI
+    speed = 250.0
+    @ball_dx = Math.cos(angle) * speed
+    @ball_dy = Math.sin(angle) * speed
 
   preload: ->
     @game.load.image("cat", "../images/cat_images/cat17.png")
@@ -106,12 +108,11 @@ class GameState
     @right_paddle.drawRect(0, -65, 30, 130)
 
     # ball
-    @ball = game.add.sprite(size_x / 4, size_y / 4, "cat")
+    @ball = game.add.sprite(0, 0, "cat")
     @ball.height = 50
     @ball.width = 50
     @ball.anchor.set(0.5, 0.5)
-    @ball_dx = 300
-    @ball_dy = 300
+    @reset_ball()
 
     @meow = game.add.audio("meow")
     @meow2 = game.add.audio("meow2")

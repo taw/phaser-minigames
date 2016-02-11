@@ -75,10 +75,13 @@
     };
 
     GameState.prototype.reset_ball = function() {
+      var angle, speed;
       this.ball.x = size_x / 2;
       this.ball.y = size_y / 2;
-      this.ball_dx = 150;
-      return this.ball_dy = 150;
+      angle = Math.random() * 2 * Math.PI;
+      speed = 250.0;
+      this.ball_dx = Math.cos(angle) * speed;
+      return this.ball_dy = Math.sin(angle) * speed;
     };
 
     GameState.prototype.preload = function() {
@@ -120,12 +123,11 @@
       this.right_paddle.lineStyle(0);
       this.right_paddle.beginFill(0x000);
       this.right_paddle.drawRect(0, -65, 30, 130);
-      this.ball = game.add.sprite(size_x / 4, size_y / 4, "cat");
+      this.ball = game.add.sprite(0, 0, "cat");
       this.ball.height = 50;
       this.ball.width = 50;
       this.ball.anchor.set(0.5, 0.5);
-      this.ball_dx = 300;
-      this.ball_dy = 300;
+      this.reset_ball();
       this.meow = game.add.audio("meow");
       return this.meow2 = game.add.audio("meow2");
     };
