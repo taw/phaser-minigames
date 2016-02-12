@@ -232,7 +232,7 @@
       if (x >= 0 && x <= this.board.size_x - 1 && y >= 0 && y <= this.board.size_y - 1) {
         this.board.click_cell(x, y);
         if (this.board.grid[x][y].c === "X") {
-          return game.add.audio("meow").play();
+          return this.meow.play();
         }
       }
     };
@@ -244,6 +244,7 @@
       });
       this.game.stage.backgroundColor = "8F8";
       this.board = new Board;
+      this.meow = game.add.audio("meow");
       return this.game.input.onTap.add((function(_this) {
         return function() {
           return _this.click(_this.game.input.activePointer.worldX, _this.game.input.activePointer.worldY);

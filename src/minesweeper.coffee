@@ -135,12 +135,13 @@ class GameState
     if x >= 0 and x <= @board.size_x-1 and y >= 0 and y <= @board.size_y-1
       @board.click_cell(x,y)
       if @board.grid[x][y].c == "X"
-        game.add.audio("meow").play()
+        @meow.play()
 
   create: ->
     @result = game.add.text(16, 16, '', { fontSize: '32px', fill: '#fff' })
     @game.stage.backgroundColor = "8F8"
     @board = new Board
+    @meow = game.add.audio("meow")
     @game.input.onTap.add =>
       @click(
         @game.input.activePointer.worldX,
