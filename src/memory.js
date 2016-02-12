@@ -105,7 +105,7 @@
 
     Board.prototype.click_cell = function(x, y) {
       if (this.grid[x][y].status === "revealed") {
-        return false;
+        return null;
       }
       switch (this.status) {
         case "ready":
@@ -113,22 +113,21 @@
           this.x1 = x;
           this.y1 = y;
           this.status = "one";
-          return false;
+          return null;
         case "one":
           if (x === this.x1 && y === this.y1) {
-            return false;
+            return null;
           } else if (this.grid[x][y].c === this.grid[this.x1][this.y1].c) {
             this.grid[this.x1][this.y1].set_status("revealed");
             this.grid[x][y].set_status("revealed");
             this.status = "ready";
-            game.add.audio("meow").play();
-            return true;
+            return "match";
           } else {
             this.grid[x][y].set_status("peek");
             this.x2 = x;
             this.y2 = y;
             this.status = "two";
-            return true;
+            return "miss";
           }
           break;
         case "two":
@@ -136,7 +135,7 @@
           this.grid[this.x2][this.y2].set_status("hidden");
           this.status = "ready";
           this.click_cell(x, y);
-          return false;
+          return null;
       }
     };
 
@@ -163,8 +162,12 @@
       x = Math.round((x - size_x / 2 + 96 * 2.5) / 96);
       y = Math.round((y - size_y / 2 + 96 * 2.5) / 96);
       if (x >= 0 && x <= this.board.size_x - 1 && y >= 0 && y <= this.board.size_y - 1) {
-        if (this.board.click_cell(x, y)) {
-          return this.score += 1;
+        switch (this.board.click_cell(x, y)) {
+          case "match":
+            game.add.audio("meow").play();
+            return this.score += 1;
+          case "miss":
+            return this.score += 1;
         }
       }
     };

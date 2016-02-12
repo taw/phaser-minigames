@@ -62,7 +62,7 @@ class Board
         new Tile(loc_x,loc_y,@content[x][y])
 
   click_cell: (x,y) ->
-    return false if @grid[x][y].status == "revealed"
+    return null if @grid[x][y].status == "revealed"
 
     switch @status
       when "ready"
@@ -70,28 +70,27 @@ class Board
         @x1 = x
         @y1 = y
         @status = "one"
-        false
+        null
       when "one"
         if x == @x1 and y == @y1
-          false
+          null
         else if @grid[x][y].c == @grid[@x1][@y1].c
           @grid[@x1][@y1].set_status("revealed")
           @grid[x][y].set_status("revealed")
           @status = "ready"
-          game.add.audio("meow").play()
-          true
+          "match"
         else
           @grid[x][y].set_status("peek")
           @x2 = x
           @y2 = y
           @status = "two"
-          true
+          "miss"
       when "two"
         @grid[@x1][@y1].set_status("hidden")
         @grid[@x2][@y2].set_status("hidden")
         @status = "ready"
         @click_cell(x, y)
-        false
+        null
 
 class GameState
   preload: ->
@@ -106,8 +105,12 @@ class GameState
     x = Math.round((x - size_x / 2 + 96*2.5) / 96)
     y = Math.round((y - size_y / 2 + 96*2.5) / 96)
     if x >= 0 and x <= @board.size_x-1 and y >= 0 and y <= @board.size_y-1
-      if @board.click_cell(x,y)
-        @score += 1
+      switch @board.click_cell(x,y)
+        when "match"
+          game.add.audio("meow").play()
+          @score += 1
+        when "miss"
+          @score += 1
 
   create: ->
     @score = 0
