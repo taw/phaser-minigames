@@ -61,7 +61,7 @@ class Ball
       @dy *= 0.8
 
   random_direction: ->
-    angle = Math.random() * 2 * Math.PI
+    angle = game.math.degToRad(game.rnd.between(0,360))
     speed = Math.random() * 400.0
     @dx = Math.cos(angle) * speed
     @dy = Math.sin(angle) * speed

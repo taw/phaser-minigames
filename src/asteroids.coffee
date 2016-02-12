@@ -40,10 +40,10 @@ class SpaceShip
     @ensure_bounds()
 
   dir_x: ->
-    Math.sin(Math.PI*2*@angle/360)
+    Math.sin(game.math.degToRad(@angle))
 
   dir_y: ->
-    -Math.cos(Math.PI*2*@angle/360)
+    -Math.cos(game.math.degToRad(@angle))
 
   limit_speed: ->
     dl = Math.sqrt(@dx*@dx + @dy*@dy)
@@ -66,10 +66,10 @@ class Asteroid
   constructor: (x,y) ->
     @x  = x
     @y  = y
-    angle = Math.random() * 2 * Math.PI
+    angle = game.rnd.between(0,360)
     speed = game.rnd.between(50, 200)
-    @dx = Math.cos(angle) * speed
-    @dy = Math.sin(angle) * speed
+    @dx = Math.cos(game.math.degToRad(angle)) * speed
+    @dy = Math.sin(game.math.degToRad(angle)) * speed
     @graphics = game.add.graphics(@x, @y)
     @graphics.beginFill(0xFF0000)
     @graphics.drawCircle(0, 0, 20)

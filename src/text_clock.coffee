@@ -7,9 +7,9 @@ class GameState
     null
 
   interpolate_angle: (distance, angle_ratio) ->
-    x = size_x / 2 + distance * Math.sin(Math.PI*2 * angle_ratio)
-    y = size_y / 2 - distance * Math.cos(Math.PI*2 * angle_ratio)
     a = 360 * angle_ratio
+    x = size_x / 2 + distance * Math.sin(game.math.degToRad(a))
+    y = size_y / 2 - distance * Math.cos(game.math.degToRad(a))
     [x,y,a]
 
   hour_text: (i) ->

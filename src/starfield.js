@@ -13,7 +13,7 @@
 
     GameState.prototype.reset_star_position = function(star_sprite) {
       var angle, speed;
-      angle = Math.random() * 2 * Math.PI;
+      angle = game.math.degToRad(game.rnd.between(0, 360));
       speed = game.rnd.between(50, 400);
       star_sprite.x = size_x / 2 + game.rnd.between(-50, 50);
       return star_sprite.y = size_y / 2 + game.rnd.between(-50, 50);

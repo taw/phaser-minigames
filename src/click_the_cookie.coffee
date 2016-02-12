@@ -29,7 +29,7 @@ class GameState
     @cookie.events.onInputDown.add =>
       @score += 1
 
-    angle = Math.random() * 2 * Math.PI
+    angle = game.math.degToRad(game.rnd.between(0, 360))
     speed = 200.0
     @dx = Math.cos(angle) * speed
     @dy = Math.sin(angle) * speed

@@ -44,7 +44,7 @@
           return _this.score += 1;
         };
       })(this));
-      angle = Math.random() * 2 * Math.PI;
+      angle = game.math.degToRad(game.rnd.between(0, 360));
       speed = 200.0;
       this.dx = Math.cos(angle) * speed;
       return this.dy = Math.sin(angle) * speed;

@@ -45,11 +45,11 @@
     };
 
     SpaceShip.prototype.dir_x = function() {
-      return Math.sin(Math.PI * 2 * this.angle / 360);
+      return Math.sin(game.math.degToRad(this.angle));
     };
 
     SpaceShip.prototype.dir_y = function() {
-      return -Math.cos(Math.PI * 2 * this.angle / 360);
+      return -Math.cos(game.math.degToRad(this.angle));
     };
 
     SpaceShip.prototype.limit_speed = function() {

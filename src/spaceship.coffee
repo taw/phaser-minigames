@@ -38,10 +38,10 @@ class SpaceShip
     @ensure_bounds()
 
   dir_x: ->
-    Math.sin(Math.PI*2*@angle/360)
+    Math.sin(game.math.degToRad(@angle))
 
   dir_y: ->
-    -Math.cos(Math.PI*2*@angle/360)
+    -Math.cos(game.math.degToRad(@angle))
 
   limit_speed: ->
     dl = Math.sqrt(@dx*@dx + @dy*@dy)

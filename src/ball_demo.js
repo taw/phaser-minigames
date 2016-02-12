@@ -91,7 +91,7 @@
 
     Ball.prototype.random_direction = function() {
       var angle, speed;
-      angle = Math.random() * 2 * Math.PI;
+      angle = game.math.degToRad(game.rnd.between(0, 360));
       speed = Math.random() * 400.0;
       this.dx = Math.cos(angle) * speed;
       return this.dy = Math.sin(angle) * speed;

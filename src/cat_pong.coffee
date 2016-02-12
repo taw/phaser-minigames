@@ -17,7 +17,7 @@ class GameState
       @right_paddle.y += dt * 600
 
     # ensure paddle boundaries
-    @left_paddle.y = game.math.clamp(@left_paddle.y, 75, size_y - 75)
+    @left_paddle.y  = game.math.clamp(@left_paddle.y,  75, size_y - 75)
     @right_paddle.y = game.math.clamp(@right_paddle.y, 75, size_y - 75)
 
     # move ball
@@ -54,7 +54,7 @@ class GameState
   bounce_left_paddle: ->
     intercept = (@left_paddle.y - @ball.y) / (65 + 25)
     speed = 1.1 * Math.sqrt(@ball_dx*@ball_dx + @ball_dy*@ball_dy)
-    @launch_ball(speed, 0 + 45*intercept)
+    @launch_ball(speed, 0 - 45*intercept)
     @meow.play()
 
   bounce_right_paddle: ->
@@ -70,8 +70,8 @@ class GameState
     Math.abs(@right_paddle.y - @ball.y) < 65 + 25
 
   launch_ball: (speed, angle) ->
-    @ball_dx = Math.cos(angle / 360.0 * Math.PI * 2) * speed
-    @ball_dy = Math.sin(angle / 360.0 * Math.PI * 2) * speed
+    @ball_dx = Math.cos(game.math.degToRad(angle)) * speed
+    @ball_dy = Math.sin(game.math.degToRad(angle)) * speed
 
   reset_ball: ->
     @ball.x = size_x / 2

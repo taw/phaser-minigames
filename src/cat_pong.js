@@ -66,7 +66,7 @@
       var intercept, speed;
       intercept = (this.left_paddle.y - this.ball.y) / (65 + 25);
       speed = 1.1 * Math.sqrt(this.ball_dx * this.ball_dx + this.ball_dy * this.ball_dy);
-      this.launch_ball(speed, 0 + 45 * intercept);
+      this.launch_ball(speed, 0 - 45 * intercept);
       return this.meow.play();
     };
 
@@ -87,8 +87,8 @@
     };
 
     GameState.prototype.launch_ball = function(speed, angle) {
-      this.ball_dx = Math.cos(angle / 360.0 * Math.PI * 2) * speed;
-      return this.ball_dy = Math.sin(angle / 360.0 * Math.PI * 2) * speed;
+      this.ball_dx = Math.cos(game.math.degToRad(angle)) * speed;
+      return this.ball_dy = Math.sin(game.math.degToRad(angle)) * speed;
     };
 
     GameState.prototype.reset_ball = function() {

@@ -47,11 +47,11 @@
     };
 
     SpaceShip.prototype.dir_x = function() {
-      return Math.sin(Math.PI * 2 * this.angle / 360);
+      return Math.sin(game.math.degToRad(this.angle));
     };
 
     SpaceShip.prototype.dir_y = function() {
-      return -Math.cos(Math.PI * 2 * this.angle / 360);
+      return -Math.cos(game.math.degToRad(this.angle));
     };
 
     SpaceShip.prototype.limit_speed = function() {
@@ -87,10 +87,10 @@
       var angle, speed;
       this.x = x;
       this.y = y;
-      angle = Math.random() * 2 * Math.PI;
+      angle = game.rnd.between(0, 360);
       speed = game.rnd.between(50, 200);
-      this.dx = Math.cos(angle) * speed;
-      this.dy = Math.sin(angle) * speed;
+      this.dx = Math.cos(game.math.degToRad(angle)) * speed;
+      this.dy = Math.sin(game.math.degToRad(angle)) * speed;
       this.graphics = game.add.graphics(this.x, this.y);
       this.graphics.beginFill(0xFF0000);
       this.graphics.drawCircle(0, 0, 20);
