@@ -105,7 +105,7 @@ class GameState
     if x >= 0 and x <= @board.size_x-1 and y >= 0 and y <= @board.size_y-1
       switch @board.click_cell(x,y)
         when "match"
-          game.add.audio("meow").play()
+          @meow.play()
           @score += 1
         when "miss"
           @score += 1
@@ -113,10 +113,9 @@ class GameState
   create: ->
     @score = 0
     @scoreText = game.add.text(16, 16, '', { fontSize: '32px', fill: '#fff' })
-
+    @meow = game.add.audio("meow")
     @button_menu = game.add.button 16, 64, 'menu', =>
       game.state.start("Menu")
-
     @game.stage.backgroundColor = "88F"
     @board = new Board(@x,@y)
     @game.input.onTap.add =>

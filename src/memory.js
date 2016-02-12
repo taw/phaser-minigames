@@ -160,7 +160,7 @@
       if (x >= 0 && x <= this.board.size_x - 1 && y >= 0 && y <= this.board.size_y - 1) {
         switch (this.board.click_cell(x, y)) {
           case "match":
-            game.add.audio("meow").play();
+            this.meow.play();
             return this.score += 1;
           case "miss":
             return this.score += 1;
@@ -174,6 +174,7 @@
         fontSize: '32px',
         fill: '#fff'
       });
+      this.meow = game.add.audio("meow");
       this.button_menu = game.add.button(16, 64, 'menu', (function(_this) {
         return function() {
           return game.state.start("Menu");
