@@ -6,6 +6,7 @@ class Board
   constructor: ->
     @size_x = 8
     @size_y = 8
+    @active = true
     @grid = for x in [0...@size_x]
       for y in [0...@size_y]
         loc_x = size_x/2 + 80*(x-3.5)
@@ -23,14 +24,23 @@ class Board
     @grid[x][y].loadTexture("cat#{c}")
 
   rotate: (x, y) ->
-    c0 = @grid[x][y].c
-    c1 = @grid[x+1][y].c
-    c2 = @grid[x+1][y+1].c
-    c3 = @grid[x][y+1].c
-    @set_tile(x,  y,  c3)
-    @set_tile(x+1,y,  c0)
-    @set_tile(x+1,y+1,c1)
-    @set_tile(x,  y+1,c2)
+    return unless @active
+    t0 = @grid[x][y]
+    t1 = @grid[x+1][y]
+    t2 = @grid[x+1][y+1]
+    t3 = @grid[x][y+1]
+    game.add.tween(t0).to({x: t0.x+80}, 500, "Linear", true)
+    game.add.tween(t1).to({y: t1.y+80}, 500, "Linear", true)
+    game.add.tween(t2).to({x: t2.x-80}, 500, "Linear", true)
+    game.add.tween(t3).to({y: t3.y-80}, 500, "Linear", true)
+    @grid[x][y]     = t3
+    @grid[x+1][y]   = t0
+    @grid[x+1][y+1] = t1
+    @grid[x][y+1]   = t2
+    @active = false
+    # Same time as animations
+    game.time.events.add 500, =>
+      @active = true
 
   find_matches: ->
     @matches = []

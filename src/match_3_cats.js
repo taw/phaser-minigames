@@ -13,6 +13,7 @@
       var c, loc_x, loc_y, tile, x, y;
       this.size_x = 8;
       this.size_y = 8;
+      this.active = true;
       this.grid = (function() {
         var k, ref, results;
         results = [];
@@ -44,15 +45,36 @@
     };
 
     Board.prototype.rotate = function(x, y) {
-      var c0, c1, c2, c3;
-      c0 = this.grid[x][y].c;
-      c1 = this.grid[x + 1][y].c;
-      c2 = this.grid[x + 1][y + 1].c;
-      c3 = this.grid[x][y + 1].c;
-      this.set_tile(x, y, c3);
-      this.set_tile(x + 1, y, c0);
-      this.set_tile(x + 1, y + 1, c1);
-      return this.set_tile(x, y + 1, c2);
+      var t0, t1, t2, t3;
+      if (!this.active) {
+        return;
+      }
+      t0 = this.grid[x][y];
+      t1 = this.grid[x + 1][y];
+      t2 = this.grid[x + 1][y + 1];
+      t3 = this.grid[x][y + 1];
+      game.add.tween(t0).to({
+        x: t0.x + 80
+      }, 500, "Linear", true);
+      game.add.tween(t1).to({
+        y: t1.y + 80
+      }, 500, "Linear", true);
+      game.add.tween(t2).to({
+        x: t2.x - 80
+      }, 500, "Linear", true);
+      game.add.tween(t3).to({
+        y: t3.y - 80
+      }, 500, "Linear", true);
+      this.grid[x][y] = t3;
+      this.grid[x + 1][y] = t0;
+      this.grid[x + 1][y + 1] = t1;
+      this.grid[x][y + 1] = t2;
+      this.active = false;
+      return game.time.events.add(500, (function(_this) {
+        return function() {
+          return _this.active = true;
+        };
+      })(this));
     };
 
     Board.prototype.find_matches = function() {
