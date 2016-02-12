@@ -41,8 +41,7 @@
           this.bounce_left_paddle();
         } else {
           this.right_score_val += 1;
-          this.reset_ball();
-          this.meow2.play();
+          this.fail_effects();
         }
       }
       if (this.ball.x > size_x - 65 && this.ball_dx > 0) {
@@ -50,8 +49,7 @@
           this.bounce_right_paddle();
         } else {
           this.left_score_val += 1;
-          this.reset_ball();
-          this.meow2.play();
+          this.fail_effects();
         }
       }
       if (this.ball.y < 25 && this.ball_dy < 0) {
@@ -67,7 +65,7 @@
       intercept = (this.left_paddle.y - this.ball.y) / (65 + 25);
       speed = 1.1 * Math.sqrt(this.ball_dx * this.ball_dx + this.ball_dy * this.ball_dy);
       this.launch_ball(speed, 0 - 45 * intercept);
-      return this.meow.play();
+      return this.bounce_effects();
     };
 
     GameState.prototype.bounce_right_paddle = function() {
@@ -75,7 +73,19 @@
       intercept = (this.right_paddle.y - this.ball.y) / (65 + 25);
       speed = 1.1 * Math.sqrt(this.ball_dx * this.ball_dx + this.ball_dy * this.ball_dy);
       this.launch_ball(speed, 180 + 45 * intercept);
+      return this.bounce_effects();
+    };
+
+    GameState.prototype.bounce_effects = function() {
+      this.emitter.x = this.ball.x;
+      this.emitter.y = this.ball.y;
+      this.emitter.start(true, 5000, null, 10);
       return this.meow.play();
+    };
+
+    GameState.prototype.fail_effects = function() {
+      this.meow2.play();
+      return this.reset_ball();
     };
 
     GameState.prototype.hit_left_paddle = function() {
@@ -105,13 +115,14 @@
 
     GameState.prototype.preload = function() {
       this.game.load.image("cat", "../images/cat_images/cat17.png");
+      this.game.load.image("star", "../images/star-icon.png");
       this.game.load.audio("meow", "../audio/cat_meow.mp3");
       return this.game.load.audio("meow2", "../audio/cat_meow_2.mp3");
     };
 
     GameState.prototype.create = function() {
       var i, ref, ref1, y;
-      this.game.stage.backgroundColor = "FFFF00";
+      this.game.stage.backgroundColor = "AAFFAA";
       this.grid = game.add.graphics(size_x / 2, size_y / 2);
       this.grid.lineStyle(5, "white");
       for (y = i = ref = -size_y / 2, ref1 = size_y / 2; i <= ref1; y = i += 20) {
@@ -142,6 +153,9 @@
       this.right_paddle.lineStyle(0);
       this.right_paddle.beginFill(0x000);
       this.right_paddle.drawRect(0, -65, 30, 130);
+      this.emitter = game.add.emitter(0, 0, 1000);
+      this.emitter.makeParticles('star');
+      this.emitter.gravity = 200;
       this.ball = game.add.sprite(0, 0, "cat");
       this.ball.height = 50;
       this.ball.width = 50;

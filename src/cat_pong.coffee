@@ -37,15 +37,13 @@ class GameState
         @bounce_left_paddle()
       else
         @right_score_val += 1
-        @reset_ball()
-        @meow2.play()
+        @fail_effects()
     if @ball.x > size_x-65 and @ball_dx > 0
       if @hit_right_paddle()
         @bounce_right_paddle()
       else
         @left_score_val += 1
-        @reset_ball()
-        @meow2.play()
+        @fail_effects()
     if @ball.y < 25 and @ball_dy < 0
       @ball_dy = -@ball_dy
     if @ball.y > size_y-25 and @ball_dy > 0
@@ -55,13 +53,23 @@ class GameState
     intercept = (@left_paddle.y - @ball.y) / (65 + 25)
     speed = 1.1 * Math.sqrt(@ball_dx*@ball_dx + @ball_dy*@ball_dy)
     @launch_ball(speed, 0 - 45*intercept)
-    @meow.play()
+    @bounce_effects()
 
   bounce_right_paddle: ->
     intercept = (@right_paddle.y - @ball.y) / (65 + 25)
     speed = 1.1 * Math.sqrt(@ball_dx*@ball_dx + @ball_dy*@ball_dy)
     @launch_ball(speed, 180 + 45*intercept)
+    @bounce_effects()
+
+  bounce_effects: ->
+    @emitter.x = @ball.x
+    @emitter.y = @ball.y
+    @emitter.start true, 5000, null, 10
     @meow.play()
+
+  fail_effects: ->
+    @meow2.play()
+    @reset_ball()
 
   hit_left_paddle: ->
     Math.abs(@left_paddle.y - @ball.y) < 65 + 25
@@ -86,11 +94,12 @@ class GameState
 
   preload: ->
     @game.load.image("cat", "../images/cat_images/cat17.png")
+    @game.load.image("star", "../images/star-icon.png")
     @game.load.audio("meow", "../audio/cat_meow.mp3")
     @game.load.audio("meow2", "../audio/cat_meow_2.mp3")
 
   create: ->
-    @game.stage.backgroundColor = "FFFF00"
+    @game.stage.backgroundColor = "AAFFAA"
     @grid = game.add.graphics(size_x / 2, size_y / 2)
     @grid.lineStyle(5, "white")
 
@@ -121,6 +130,11 @@ class GameState
     @right_paddle.lineStyle(0)
     @right_paddle.beginFill(0x000)
     @right_paddle.drawRect(0, -65, 30, 130)
+
+    # star emitter
+    @emitter = game.add.emitter(0, 0, 1000)
+    @emitter.makeParticles('star')
+    @emitter.gravity = 200
 
     # ball
     @ball = game.add.sprite(0, 0, "cat")
